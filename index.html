@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guru Krish — Enterprise AI Transformation & Governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4f1eb;
+    --cream: #ede9e0;
+    --accent: #c8392b;
+    --navy: #1c3557;
+    --gold: #c9973a;
+    --muted: #6b6560;
+    --rule: #d4cfc8;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(244,241,235,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 60px;
+  }
+
+  .hero-left {
+    background: var(--ink);
+    color: white;
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,57,43,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: white;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-title {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 48px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .stat {
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+  }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.4;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: #a82d22; }
+
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: white;
+    color: white;
+  }
+
+  .hero-right {
+    background: var(--cream);
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .brand-statement {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .what-i-do {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pillar {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .pillar-num {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--rule);
+    line-height: 1.2;
+    min-width: 28px;
+  }
+
+  .pillar-content {}
+
+  .pillar-title {
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+    font-size: 14px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    background: white;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 96px 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    display: block;
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+    max-width: 60px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 48px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── HOW I THINK ── */
+  .think-section {
+    background: var(--ink);
+    color: white;
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .principle {
+    padding: 40px 36px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .principle:last-child { border-right: none; }
+
+  .principle-icon {
+    font-family: 'Fraunces', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .principle-text {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: white;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .principle-exp {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+
+  /* ── CASE STUDIES ── */
+  .cases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+  }
+
+  .case {
+    background: var(--paper);
+    padding: 40px 36px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .case:hover { background: var(--cream); }
+
+  .case-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .case-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  .case-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+
+  .case-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .metric {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .metric-num {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .metric-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── FRAMEWORKS ── */
+  .frameworks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .framework-card {
+    border: 1px solid var(--rule);
+    padding: 40px;
+    background: white;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .framework-card:hover { border-color: var(--navy); }
+
+  .framework-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+
+  .framework-card:nth-child(1)::before { background: var(--accent); }
+  .framework-card:nth-child(2)::before { background: var(--navy); }
+
+  .framework-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .framework-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.25;
+  }
+
+  .framework-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+
+  .framework-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.2s;
+  }
+
+  .framework-link:hover { gap: 14px; }
+  .framework-link::after { content: '→'; }
+
+  /* ── SYSTEMS ── */
+  .systems {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .system-card {
+    background: var(--cream);
+    padding: 36px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .system-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .system-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .system-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .system-stack {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .stack-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: white;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+  }
+
+  .coming-soon {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 96px 48px;
+  }
+
+  .contact-section .section-label {
+    color: var(--gold);
+    justify-content: center;
+  }
+
+  .contact-section .section-label::after {
+    display: none;
+  }
+
+  .contact-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 48px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 28px;
+    transition: all 0.2s;
+  }
+
+  .contact-link.primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .contact-link.primary:hover { background: #a82d22; }
+
+  .contact-link.secondary {
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .contact-link.secondary:hover {
+    border-color: white;
+    color: white;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.3);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+  }
+
+  footer a:hover { color: rgba(255,255,255,0.6); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero-name { animation-delay: 0.2s; }
+  .hero-title { animation-delay: 0.3s; }
+  .hero-stats { animation-delay: 0.4s; }
+  .hero-cta { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-left, .hero-right { padding: 60px 32px; }
+    .principles { grid-template-columns: 1fr; }
+    .principle { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .cases { grid-template-columns: 1fr; }
+    .frameworks { grid-template-columns: 1fr; }
+    .systems { grid-template-columns: 1fr; }
+    nav { padding: 0 24px; }
+    .nav-links { gap: 20px; }
+    .container { padding: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Guru Krish</a>
+  <ul class="nav-links">
+    <li><a href="#think">Principles</a></li>
+    <li><a href="#work">Case Studies</a></li>
+    <li><a href="#frameworks">Frameworks</a></li>
+    <li><a href="#systems">AI Systems</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">ex-Google · ex-Amazon · Austin, TX</div>
+    <h1 class="hero-name">Guru<br><em>Krish</em></h1>
+    <p class="hero-title">Director — Enterprise AI Transformation, Governance & Security</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">$700M+</div>
+        <div class="stat-label">Business impact enabled</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">150+</div>
+        <div class="stat-label">Business units governed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">18 yrs</div>
+        <div class="stat-label">Google & Amazon</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">7→1wk</div>
+        <div class="stat-label">AI pipeline delivery</div>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="mailto:gurukrish81@gmail.com" class="btn-primary">Get in Touch</a>
+      <a href="https://linkedin.com/in/gurukrish" class="btn-secondary" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <p class="brand-statement">"I build the operating infrastructure that makes enterprise AI scalable, trustworthy, and governable — not by building the models, but by building everything around them."</p>
+
+    <div class="what-i-do">What I do</div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-content">
+          <div class="pillar-title">Enterprise AI Transformation</div>
+          <div class="pillar-desc">Define how organizations adopt AI — strategy, platform infrastructure, operating model, and executive reporting.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-content">
+          <div class="pillar-title">AI Governance & Security</div>
+          <div class="pillar-desc">Build the controls, frameworks, and enforcement mechanisms that make AI safe to deploy at scale.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-content">
+          <div class="pillar-title">Hands-on AI Systems</div>
+          <div class="pillar-desc">Build and deploy LLM pipelines, governance workflows, and agentic systems — not just strategy documents.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="badges">
+      <span class="badge">NIST AI RMF</span>
+      <span class="badge">AWS Bedrock</span>
+      <span class="badge">Trust by Design</span>
+      <span class="badge">LLM Governance</span>
+      <span class="badge">Agentic AI</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW I THINK -->
+<section class="think-section" id="think">
+  <div class="container">
+    <div class="section-label" style="color: var(--gold);">How I Think</div>
+    <h2 class="section-title" style="color: white; margin-bottom: 48px;">Three principles that guide every engagement</h2>
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-icon">01</div>
+        <p class="principle-text">"Governance that nobody uses is just overhead. The gateway has to be easier than the workaround."</p>
+        <p class="principle-exp">At Google, Risk Inspector succeeded because compliance became the path of least resistance — not because we mandated it. At Amazon, adoption followed when we removed friction, not when we added policy.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">02</div>
+        <p class="principle-text">"The platform scales. The headcount doesn't have to."</p>
+        <p class="principle-exp">A centralized LLM gateway governing 600 engineers costs the same to operate whether you have 3 solutions engineers or 18. Build the mechanism first, then scale the team into it.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">03</div>
+        <p class="principle-text">"Fix the pain before you ask for adoption."</p>
+        <p class="principle-exp">7-week access backlogs at Amazon. 3-month privacy reviews at Google. In both cases, adoption followed from removing friction — not from training sessions or mandates.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="work">
+  <div class="container">
+    <div class="section-label">Case Studies</div>
+    <h2 class="section-title">Real programs. Real outcomes.</h2>
+    <div class="cases">
+      <div class="case">
+        <div class="case-company">Google — 3P Security & Privacy</div>
+        <h3 class="case-title">Risk Inspector: Governing 150+ Business Units at Scale</h3>
+        <p class="case-desc">Walked into a company-wide Salesforce crisis — $700M in platform value blocked overnight. Designed 12 security and privacy controls, built Risk Inspector as the mandatory governance platform, and unblocked the ecosystem.</p>
+        <div class="case-metrics">
+          <div class="metric">
+            <span class="metric-num">150d→10h</span>
+            <span class="metric-desc">Partner onboarding time</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">$500M+</span>
+            <span class="metric-desc">Ecosystem value unlocked</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">3,700+</span>
+            <span class="metric-desc">Licenses eliminated</span>
+          </div>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-company">Amazon — Security Data Intelligence</div>
+        <h3 class="case-title">LLM Governance Pipeline: From 7 Weeks to 1 Week</h3>
+        <p class="case-desc">Built an end-to-end LLM classification pipeline on AWS Bedrock — Python API, S3, Jupyter Notebook, prompt engineering, input validation, output validation framework. Drove adoption across 70%+ of engineering teams.</p>
+        <div class="case-metrics">
+          <div class="metric">
+            <span class="metric-num">7→1wk</span>
+            <span class="metric-desc">Access request resolution</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">2,500+</span>
+            <span class="metric-desc">Requests classified</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">50%</span>
+            <span class="metric-desc">Builder satisfaction lift</span>
+          </div>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-company">Google — AI/ML Strategy</div>
+        <h3 class="case-title">Enterprise AI Operating Model: 14 Verticals, $50M Portfolio</h3>
+        <p class="case-desc">Built and ran the AI/ML strategy program across 14 Google corporate verticals — intake framework, financial impact model with Finance, SteerCo with 20+ Directors and SVPs, OKR alignment across 50+ programs.</p>
+        <div class="case-metrics">
+          <div class="metric">
+            <span class="metric-num">50+</span>
+            <span class="metric-desc">AI programs governed</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">$30-50M</span>
+            <span class="metric-desc">Portfolio managed</span>
+          </div>
+          <div class="metric">
+            <span class="metric-num">14</span>
+            <span class="metric-desc">Corporate verticals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FRAMEWORKS -->
+<section id="frameworks" style="background: var(--cream);">
+  <div class="container">
+    <div class="section-label">Frameworks & Playbooks</div>
+    <h2 class="section-title">Reusable architectures for enterprise AI</h2>
+    <div class="frameworks">
+      <div class="framework-card">
+        <div class="framework-tag">Governance Framework</div>
+        <h3 class="framework-title">Trust by Design</h3>
+        <p class="framework-desc">A reusable control architecture for enterprise AI systems — risk tiering, agentic AI threat models, guardrail enforcement patterns, and evaluation frameworks for safe LLM deployment. Built from 18 years of governance experience at Google and Amazon.</p>
+        <a href="https://github.com/gurukrish81" class="framework-link" target="_blank">View on GitHub</a>
+      </div>
+      <div class="framework-card">
+        <div class="framework-tag">Transformation Playbook</div>
+        <h3 class="framework-title">Enterprise AI Transformation Playbook</h3>
+        <p class="framework-desc">From early traction to durable scale — the operating model, platform architecture, intake framework, and scaling flywheel that makes solution #50 as governed and reliable as solution #5. Coming soon as a published document.</p>
+        <a href="#contact" class="framework-link">Request a copy</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI SYSTEMS -->
+<section id="systems">
+  <div class="container">
+    <div class="section-label">Working AI Systems</div>
+    <h2 class="section-title">Built, not just designed</h2>
+    <div class="systems">
+      <div class="system-card">
+        <div class="system-label">Production — Amazon</div>
+        <h3 class="system-title">LLM Security Intelligence Pipeline</h3>
+        <p class="system-desc">End-to-end classification system built on AWS Bedrock. Pulls security ticket data via Python API, classifies request types using prompt engineering, validates outputs, drives policy decisions. Processed 2,500+ requests in production.</p>
+        <div class="system-stack">
+          <span class="stack-tag">AWS Bedrock</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">S3</span>
+          <span class="stack-tag">Jupyter</span>
+          <span class="stack-tag">Prompt Eng.</span>
+        </div>
+      </div>
+      <div class="system-card">
+        <div class="system-label">In Progress</div>
+        <h3 class="system-title">AI Governance Intake Classifier</h3>
+        <p class="system-desc">Takes a business AI use case description, classifies risk tier (Low/Medium/High/Critical), generates discovery questions, recommends whether to proceed and who needs to approve. Built in n8n with LLM reasoning layer.</p>
+        <div class="system-stack">
+          <span class="stack-tag">n8n</span>
+          <span class="stack-tag">Claude API</span>
+          <span class="stack-tag">LangChain</span>
+        </div>
+        <p class="coming-soon">→ Live demo coming soon</p>
+      </div>
+      <div class="system-card">
+        <div class="system-label">In Progress</div>
+        <h3 class="system-title">Agentic AI Research Workflow</h3>
+        <p class="system-desc">Multi-step research agent that takes a governance question, retrieves relevant information from a knowledge base, synthesizes findings, and returns a structured recommendation with sources and confidence level.</p>
+        <div class="system-stack">
+          <span class="stack-tag">LangGraph</span>
+          <span class="stack-tag">Claude API</span>
+          <span class="stack-tag">RAG</span>
+          <span class="stack-tag">Vector DB</span>
+        </div>
+        <p class="coming-soon">→ Live demo coming soon</p>
+      </div>
+      <div class="system-card">
+        <div class="system-label">Google Programs</div>
+        <h3 class="system-title">Enterprise AI Programs — Governance & Adoption</h3>
+        <p class="system-desc">Governance and adoption lead for three Google AI programs — DocAI (250K manual hours saved), vector search (70% ticket reduction), Moma LLM responses (80% accuracy, 70% ticket reduction). Owned intake, controls, and rollout.</p>
+        <div class="system-stack">
+          <span class="stack-tag">Google DocAI</span>
+          <span class="stack-tag">Vector Search</span>
+          <span class="stack-tag">LLM Integration</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="section-label" style="color: var(--gold); justify-content: center;">Let's Talk</div>
+  <h2 class="contact-title">Open to Director and Senior Leadership roles in Enterprise AI</h2>
+  <p class="contact-sub">Austin-based. Open to remote. Focused on AI Transformation, Governance, Strategy, and Solutions roles.</p>
+  <div class="contact-links">
+    <a href="mailto:gurukrish81@gmail.com" class="contact-link primary">gurukrish81@gmail.com</a>
+    <a href="https://linkedin.com/in/gurukrish" class="contact-link secondary" target="_blank">LinkedIn</a>
+    <a href="https://github.com/gurukrish81" class="contact-link secondary" target="_blank">GitHub</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Guru Krish — Enterprise AI Transformation & Governance</span>
+  <span>Austin, TX · <a href="mailto:gurukrish81@gmail.com">gurukrish81@gmail.com</a> · 512-426-1410</span>
+</footer>
+
+</body>
+</html>
