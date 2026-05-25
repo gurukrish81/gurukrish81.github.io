@@ -820,6 +820,24 @@
 
   .cream-section .body-section { padding-top: 0; padding-bottom: 0; }
 
+
+  .diagram-container {
+    margin: 40px 0;
+    max-width: 760px;
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 24px;
+  }
+
+  .diagram-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
   @media (max-width: 768px) {
     nav { padding: 0 20px; }
     .cover-inner { padding: 48px 24px; }
@@ -996,6 +1014,88 @@
     </div>
   </div>
 
+  
+  <div class="diagram-container">
+    <div class="diagram-label">Figure 1 — LLM Gateway Architecture</div>
+    <svg width="100%" viewBox="0 0 680 420" role="img">
+      <title>LLM Gateway Architecture — Trust by Design</title>
+      <desc>Diagram showing how all AI traffic flows through a central LLM gateway with guardrails before reaching AI models</desc>
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Business Units Row -->
+      <g>
+        <rect x="20" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="65" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">Revenue</text>
+
+        <rect x="125" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="170" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">Marketing</text>
+
+        <rect x="230" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="275" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">HR</text>
+
+        <rect x="335" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="380" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">Finance</text>
+
+        <rect x="440" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="485" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">Legal</text>
+
+        <rect x="545" y="20" width="90" height="40" rx="4" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+        <text x="590" y="40" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1a4a2e;font-weight:500">Operations</text>
+      </g>
+
+      <!-- Arrows down to gateway -->
+      <line x1="65" y1="60" x2="65" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="170" y1="60" x2="170" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="275" y1="60" x2="275" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="380" y1="60" x2="380" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="485" y1="60" x2="485" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="590" y1="60" x2="590" y2="95" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+
+      <!-- LLM Gateway -->
+      <rect x="20" y="95" width="620" height="70" rx="6" fill="#1c3557" stroke="#0c2442" stroke-width="1"/>
+      <text x="340" y="122" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:14px;fill:white;font-weight:600">LLM Gateway</text>
+      <text x="340" y="148" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:10px;fill:rgba(255,255,255,0.6);letter-spacing:0.08em">Model Routing · Cost Attribution · Rate Limiting · Audit Logging · AUP Enforcement</text>
+
+      <!-- Input Guardrails -->
+      <rect x="20" y="200" width="290" height="70" rx="6" fill="#fff3e0" stroke="#e65100" stroke-width="0.5"/>
+      <text x="165" y="225" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#bf360c;letter-spacing:0.12em;text-transform:uppercase">Input Guardrails</text>
+      <text x="165" y="248" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#4e342e">PII Detection · Prompt Injection Defense · Topic Restriction</text>
+
+      <!-- Output Guardrails -->
+      <rect x="330" y="200" width="310" height="70" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="0.5"/>
+      <text x="485" y="225" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#b71c1c;letter-spacing:0.12em;text-transform:uppercase">Output Guardrails</text>
+      <text x="485" y="248" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#4e342e">Hallucination Detection · Schema Validation · Toxicity Filter</text>
+
+      <!-- Arrow down from gateway -->
+      <line x1="340" y1="165" x2="340" y2="198" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+
+      <!-- Model Routing row -->
+      <rect x="50" y="305" width="130" height="50" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="0.5"/>
+      <text x="115" y="325" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#0d47a1;letter-spacing:0.08em">FAST / LOW COST</text>
+      <text x="115" y="342" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1565c0;font-weight:500">Claude Haiku / GPT-3.5</text>
+
+      <rect x="265" y="305" width="150" height="50" rx="4" fill="#e8eaf6" stroke="#3949ab" stroke-width="0.5"/>
+      <text x="340" y="325" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#283593;letter-spacing:0.08em">COMPLEX REASONING</text>
+      <text x="340" y="342" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#3949ab;font-weight:500">Claude Opus / GPT-4</text>
+
+      <rect x="490" y="305" width="140" height="50" rx="4" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="0.5"/>
+      <text x="560" y="325" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#4a148c;letter-spacing:0.08em">ORCHESTRATION</text>
+      <text x="560" y="342" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#6a1b9a;font-weight:500">n8n / Agentic Workflows</text>
+
+      <!-- Arrows down to models -->
+      <line x1="165" y1="270" x2="115" y2="303" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="340" y1="270" x2="340" y2="303" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="485" y1="270" x2="560" y2="303" stroke="#888" stroke-width="0.8" marker-end="url(#arrow)"/>
+
+      <!-- Label -->
+      <text x="340" y="395" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#6b6560;letter-spacing:0.08em">Every AI API call passes through the gateway — no exceptions</text>
+    </svg>
+  </div>
+
   <p>These five mechanisms together create a system where every high-stakes decision has a clear, explainable, and auditable path — regardless of the probabilistic nature of the underlying model. This is the chassis that allows the business to trust the AI engine.</p>
 </div>
 </div>
@@ -1150,6 +1250,82 @@
     </div>
   </div>
 
+  
+  <div class="diagram-container">
+    <div class="diagram-label">Figure 2 — Risk Tier Decision Tree</div>
+    <svg width="100%" viewBox="0 0 680 360" role="img">
+      <title>Risk Tier Decision Tree — Trust by Design</title>
+      <desc>Decision tree showing how to classify AI use cases into four risk tiers</desc>
+      <defs>
+        <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Start -->
+      <rect x="255" y="20" width="170" height="44" rx="22" fill="#1c3557" stroke="#0c2442" stroke-width="1"/>
+      <text x="340" y="42" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:13px;fill:white;font-weight:500">New AI Use Case</text>
+
+      <!-- Q1 -->
+      <line x1="340" y1="64" x2="340" y2="100" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <rect x="200" y="100" width="280" height="44" rx="6" fill="#ede9e0" stroke="#d4cfc8" stroke-width="0.5"/>
+      <text x="340" y="122" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:12px;fill:#0a0a0a">Does it touch regulated data or drive binding decisions?</text>
+
+      <!-- No path left -->
+      <line x1="200" y1="122" x2="120" y2="122" stroke="#888" stroke-width="0.8"/>
+      <line x1="120" y1="122" x2="120" y2="180" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="155" y="115" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#2d6a4f">NO</text>
+
+      <!-- Yes path right -->
+      <line x1="480" y1="122" x2="560" y2="122" stroke="#888" stroke-width="0.8"/>
+      <line x1="560" y1="122" x2="560" y2="180" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="517" y="115" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#c8392b">YES</text>
+
+      <!-- Q2 left branch -->
+      <rect x="40" y="180" width="160" height="44" rx="6" fill="#ede9e0" stroke="#d4cfc8" stroke-width="0.5"/>
+      <text x="120" y="202" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:12px;fill:#0a0a0a">Is output consequential?</text>
+
+      <!-- Q2 right branch -->
+      <rect x="480" y="180" width="160" height="44" rx="6" fill="#ede9e0" stroke="#d4cfc8" stroke-width="0.5"/>
+      <text x="560" y="202" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:12px;fill:#0a0a0a">Regulatory exposure?</text>
+
+      <!-- Tier boxes -->
+      <!-- Tier 1 -->
+      <line x1="80" y1="224" x2="80" y2="275" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="65" y="250" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#2d6a4f">NO</text>
+      <rect x="20" y="275" width="120" height="60" rx="6" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="1"/>
+      <text x="80" y="296" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#1b5e20;letter-spacing:0.1em">TIER 1 — LOW</text>
+      <text x="80" y="315" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#2d6a4f">Routine</text>
+
+      <!-- Tier 2 -->
+      <line x1="160" y1="224" x2="220" y2="275" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="198" y="252" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#c8392b">YES</text>
+      <rect x="170" y="275" width="120" height="60" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1"/>
+      <text x="230" y="296" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#e65100;letter-spacing:0.1em">TIER 2 — MED</text>
+      <text x="230" y="315" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#e65100">Operational</text>
+
+      <!-- Tier 3 -->
+      <line x1="520" y1="224" x2="410" y2="275" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="455" y="252" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#2d6a4f">NO</text>
+      <rect x="350" y="275" width="120" height="60" rx="6" fill="#fff3e0" stroke="#e64a19" stroke-width="1"/>
+      <text x="410" y="296" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#bf360c;letter-spacing:0.1em">TIER 3 — HIGH</text>
+      <text x="410" y="315" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#bf360c">Consequential</text>
+
+      <!-- Tier 4 -->
+      <line x1="600" y1="224" x2="570" y2="275" stroke="#888" stroke-width="0.8" marker-end="url(#arrow2)"/>
+      <text x="617" y="252" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#c8392b">YES</text>
+      <rect x="510" y="275" width="140" height="60" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="1"/>
+      <text x="580" y="296" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#b71c1c;letter-spacing:0.1em">TIER 4 — CRITICAL</text>
+      <text x="580" y="315" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#b71c1c">Regulated</text>
+
+      <!-- Controls label row -->
+      <text x="80" y="350" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:#6b6560">No gate</text>
+      <text x="230" y="350" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:#6b6560">Sampling review</text>
+      <text x="410" y="350" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:#6b6560">HITL mandatory</text>
+      <text x="580" y="350" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:#6b6560">Legal + Exec approval</text>
+    </svg>
+  </div>
+
   <p>The full risk scoring matrix — with 12 criteria across impact, reversibility, data sensitivity, and regulatory exposure — is available in the GitHub repository at <strong>frameworks/01-risk-tiering-framework.md</strong>.</p>
 </div>
 </div>
@@ -1215,6 +1391,64 @@
       </div>
     </div>
   </div>
+
+  <div class="diagram-container">
+    <div class="diagram-label">Figure 3 — 30-Day Implementation Path</div>
+    <svg width="100%" viewBox="0 0 680 200" role="img">
+      <title>30-Day Implementation Path — Trust by Design</title>
+      <desc>Four-phase 30-day implementation path showing the sequence from visibility through scale</desc>
+      <defs>
+        <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Phase 1 -->
+      <rect x="20" y="40" width="145" height="120" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="0.5"/>
+      <text x="92" y="65" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#0d47a1;letter-spacing:0.1em">DAYS 1–7</text>
+      <text x="92" y="88" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:13px;fill:#0d47a1;font-weight:600">Visibility</text>
+      <text x="92" y="110" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1565c0">Shadow AI audit</text>
+      <text x="92" y="128" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1565c0">Risk classification</text>
+      <text x="92" y="146" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1565c0">Inventory all AI tools</text>
+
+      <!-- Arrow -->
+      <line x1="165" y1="100" x2="183" y2="100" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+
+      <!-- Phase 2 -->
+      <rect x="185" y="40" width="145" height="120" rx="6" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+      <text x="257" y="65" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#1b5e20;letter-spacing:0.1em">DAYS 8–14</text>
+      <text x="257" y="88" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:13px;fill:#1b5e20;font-weight:600">Platform</text>
+      <text x="257" y="110" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#2d6a4f">Deploy LLM gateway</text>
+      <text x="257" y="128" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#2d6a4f">Enforce AUP</text>
+      <text x="257" y="146" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#2d6a4f">Formalize intake</text>
+
+      <!-- Arrow -->
+      <line x1="330" y1="100" x2="348" y2="100" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+
+      <!-- Phase 3 -->
+      <rect x="350" y="40" width="145" height="120" rx="6" fill="#fff3e0" stroke="#e64a19" stroke-width="0.5"/>
+      <text x="422" y="65" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#bf360c;letter-spacing:0.1em">DAYS 15–21</text>
+      <text x="422" y="88" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:13px;fill:#bf360c;font-weight:600">Governance</text>
+      <text x="422" y="110" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#bf360c">Apply guardrails</text>
+      <text x="422" y="128" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#bf360c">HITL gates</text>
+      <text x="422" y="146" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#bf360c">Measurement baseline</text>
+
+      <!-- Arrow -->
+      <line x1="495" y1="100" x2="513" y2="100" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+
+      <!-- Phase 4 -->
+      <rect x="515" y="40" width="145" height="120" rx="6" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="0.5"/>
+      <text x="587" y="65" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#4a148c;letter-spacing:0.1em">DAYS 22–30</text>
+      <text x="587" y="88" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:13px;fill:#4a148c;font-weight:600">Scale</text>
+      <text x="587" y="110" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#6a1b9a">Train champions</text>
+      <text x="587" y="128" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#6a1b9a">First production deploy</text>
+      <text x="587" y="146" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#6a1b9a">C-suite report</text>
+
+      <!-- Bottom label -->
+      <text x="340" y="185" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#6b6560;letter-spacing:0.06em">Visibility → Platform → Governance → Scale</text>
+    </svg>
+  </div>
+
 </div>
 </div>
 
@@ -1311,3 +1545,4 @@
 
 </body>
 </html>
+
