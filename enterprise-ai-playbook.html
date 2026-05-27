@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise AI Transformation Playbook — From Early Traction to Durable Scale | Guru Krish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7LDD508FN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L7LDD508FN');
+</script>
+
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4f1eb;
+    --cream: #ede9e0;
+    --accent: #c8392b;
+    --navy: #1c3557;
+    --gold: #c9973a;
+    --muted: #6b6560;
+    --rule: #d4cfc8;
+    --white: #ffffff;
+    --green: #2d6a4f;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(244,241,235,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-home {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-home::before { content: '←'; }
+
+  .nav-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    color: white;
+    min-height: 100vh;
+    padding-top: 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -150px; right: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,151,58,0.12) 0%, transparent 65%);
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,57,43,0.08) 0%, transparent 65%);
+  }
+
+  .cover-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cover-label::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .cover-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 5.5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: white;
+    margin-bottom: 20px;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cover-subtitle {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 60px;
+    line-height: 1.4;
+    max-width: 600px;
+  }
+
+  .cover-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 48px;
+  }
+
+  .meta-item {}
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 6px;
+  }
+
+  .meta-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.4;
+  }
+
+  .cover-disclaimer {
+    padding: 16px 20px;
+    border-left: 2px solid rgba(201,151,58,0.4);
+    background: rgba(201,151,58,0.06);
+    margin-bottom: 40px;
+  }
+
+  .cover-disclaimer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .cover-toc {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    padding: 32px;
+  }
+
+  .toc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .toc-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 40px;
+    list-style: none;
+  }
+
+  .toc-list li {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+
+  .toc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 20px;
+  }
+
+  /* SECTIONS */
+  .body-section {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+    max-width: 48px;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+  }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+    margin-top: 40px;
+    line-height: 1.25;
+  }
+
+  p {
+    font-size: 15px;
+    color: #2a2520;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  .callout {
+    background: var(--ink);
+    color: white;
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-left: 4px solid var(--gold);
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .callout p {
+    color: rgba(255,255,255,0.85);
+    font-size: 16px;
+    font-style: italic;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .dark-section {
+    background: var(--ink);
+    padding: 80px 0;
+  }
+
+  .dark-section .body-section { padding-top: 0; padding-bottom: 0; }
+  .dark-section h2 { color: white; }
+  .dark-section h3 { color: var(--gold); margin-top: 32px; }
+  .dark-section p { color: rgba(255,255,255,0.7); }
+  .dark-section .section-num { color: var(--gold); }
+  .dark-section .section-divider { background: rgba(255,255,255,0.15); }
+
+  .cream-section {
+    background: var(--cream);
+    padding: 80px 0;
+  }
+
+  .cream-section .body-section { padding-top: 0; padding-bottom: 0; }
+
+  /* FAILURE PATTERNS */
+  .failure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .failure-card {
+    background: var(--paper);
+    padding: 28px;
+  }
+
+  .failure-card:hover { background: var(--cream); }
+
+  .failure-num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .failure-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .failure-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  /* OPERATING MODEL */
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .model-card {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .model-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+  }
+
+  .model-card:nth-child(1)::before { background: var(--accent); }
+  .model-card:nth-child(2)::before { background: var(--navy); }
+  .model-card:nth-child(3)::before { background: var(--gold); }
+  .model-card:nth-child(4)::before { background: var(--green); }
+  .model-card:nth-child(5)::before { background: #7b4f9e; }
+
+  .model-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .model-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .model-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* PLATFORM ARCHITECTURE */
+  .arch-diagram {
+    margin: 40px 0;
+    max-width: 780px;
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 32px;
+  }
+
+  .arch-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  /* INTAKE FRAMEWORK */
+  .intake-table {
+    width: 100%;
+    max-width: 780px;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 13px;
+  }
+
+  .intake-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--navy);
+    padding: 12px 20px;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .intake-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .intake-table tr:nth-child(even) td { background: var(--cream); }
+
+  .intake-table td:first-child {
+    font-weight: 600;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  /* SCALING FLYWHEEL */
+  .flywheel {
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  /* 90 DAY PLAN */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .days-card {
+    background: white;
+    padding: 28px 24px;
+  }
+
+  .days-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .days-card:nth-child(1) .days-label { color: var(--accent); }
+  .days-card:nth-child(2) .days-label { color: var(--navy); }
+  .days-card:nth-child(3) .days-label { color: var(--green); }
+
+  .days-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .days-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .days-items li {
+    font-size: 13px;
+    color: var(--muted);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .days-items li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .metric-card {
+    background: var(--cream);
+    padding: 28px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .metric-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .metric-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .metric-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .metric-items li {
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .metric-items li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  /* AUTHOR */
+  .author-section {
+    background: var(--ink);
+    color: white;
+    padding: 64px 0;
+  }
+
+  .author-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .author-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .author-name {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .author-title {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .author-bio {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .author-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .author-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+
+  .author-link:hover { border-color: rgba(255,255,255,0.3); }
+
+  .link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .link-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.6); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .cover-inner { padding: 48px 24px; }
+    .body-section { padding: 48px 24px; }
+    .cover-meta { grid-template-columns: 1fr 1fr; }
+    .toc-list { grid-template-columns: 1fr; }
+    .failure-grid { grid-template-columns: 1fr; }
+    .model-grid { grid-template-columns: 1fr; }
+    .days-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .author-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://gurukrish.org" class="nav-home">Portfolio</a>
+  <span class="nav-title">Enterprise AI Transformation Playbook</span>
+  <ul class="nav-links">
+    <li><a href="#why">Why AI Fails</a></li>
+    <li><a href="#model">Operating Model</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#intake">Intake</a></li>
+    <li><a href="#scale">Scale</a></li>
+    <li><a href="#metrics">Metrics</a></li>
+  </ul>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Enterprise Playbook · May 2026</div>
+    <h1 class="cover-title">Enterprise AI<br>Transformation<br><em>Playbook</em></h1>
+    <p class="cover-subtitle">From Early Traction to Durable Scale — the operating model, platform architecture, and scaling flywheel that makes solution #50 as governed and reliable as solution #5.</p>
+
+    <div class="cover-meta">
+      <div class="meta-item">
+        <div class="meta-label">Author</div>
+        <div class="meta-value">Guru Krish<br>Director — Enterprise AI Transformation, Governance & Security</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Built From</div>
+        <div class="meta-value">18 years · Google · Amazon<br>150+ business units · $700M+ impact</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Audience</div>
+        <div class="meta-value">CTOs, Heads of AI, Directors<br>of Enterprise AI Programs</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Companion</div>
+        <div class="meta-value">Trust by Design Framework<br>gurukrish.org/trust-by-design.html</div>
+      </div>
+    </div>
+
+    <div class="cover-disclaimer">
+      <p>This playbook reflects the author's independent research and professional experience. It does not represent the views, methodologies, or intellectual property of any former employer. © 2026 Guru Krish — Trust by Design™. All rights reserved.</p>
+    </div>
+
+    <div class="cover-toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><span class="toc-num">01</span> Why Enterprise AI Programs Fail</li>
+        <li><span class="toc-num">02</span> The Operating Model — Five Functions</li>
+        <li><span class="toc-num">03</span> Platform Architecture — Build Once, Scale Always</li>
+        <li><span class="toc-num">04</span> The Intake Framework — How Good Ideas Become Governed Solutions</li>
+        <li><span class="toc-num">05</span> The Scaling Flywheel — From 5 Solutions to 50</li>
+        <li><span class="toc-num">06</span> The 90-Day Implementation Plan</li>
+        <li><span class="toc-num">07</span> Measurement — What to Track and Why</li>
+        <li><span class="toc-num">08</span> Common Failure Modes at Scale</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 01 — WHY AI FAILS -->
+<div id="why">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">01 — Why AI Programs Fail</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Most Enterprise AI Programs Fail at Scale — Not at Start</h2>
+
+  <p>The first three AI solutions almost always work. They're hand-picked, well-resourced, closely watched. Leadership is excited. Engineers are motivated. The pilot succeeds.</p>
+
+  <p>Then comes the pressure to scale. More use cases. More teams. More business units demanding their own AI solution. And that's where the program breaks down — not because the technology failed, but because the operating infrastructure was never built to handle it.</p>
+
+  <div class="callout">
+    <div class="callout-label">The Core Problem</div>
+    <p>"Most organizations build AI programs the way they'd build a single product — with full attention on the first solution and an assumption that what works at five will work at fifty. It won't. Scale requires a completely different kind of infrastructure."</p>
+  </div>
+
+  <p>The six failure patterns that appear in almost every enterprise AI program that stalls after early success:</p>
+
+  <div class="failure-grid">
+    <div class="failure-card">
+      <div class="failure-num">01</div>
+      <div class="failure-title">No Intake Process</div>
+      <p class="failure-desc">Every team brings AI requests directly to the central team. The team becomes a bottleneck. New requests stall. Backlog grows. Early momentum dies.</p>
+    </div>
+    <div class="failure-card">
+      <div class="failure-num">02</div>
+      <div class="failure-title">No Platform Layer</div>
+      <p class="failure-desc">Every solution connects to AI APIs independently. No central gateway. No shared guardrails. No cost attribution. No audit trail. Technical debt accumulates faster than value.</p>
+    </div>
+    <div class="failure-card">
+      <div class="failure-num">03</div>
+      <div class="failure-title">No Handoff Model</div>
+      <p class="failure-desc">The central AI team becomes permanent support for every deployed solution. They can't take on new work because they're maintaining old work. Delivery stops at solution 10.</p>
+    </div>
+    <div class="failure-card">
+      <div class="failure-num">04</div>
+      <div class="failure-title">No Governance Controls</div>
+      <p class="failure-desc">Solutions get deployed without risk assessment. A high-stakes workflow uses an ungoverned model. An incident occurs. Leadership loses confidence. The program gets restricted or shut down.</p>
+    </div>
+    <div class="failure-card">
+      <div class="failure-num">05</div>
+      <div class="failure-title">No Measurement System</div>
+      <p class="failure-desc">The program can't prove its value to the CFO. When budget pressure comes, the AI program has no defensible ROI. Investment gets cut regardless of actual impact.</p>
+    </div>
+    <div class="failure-card">
+      <div class="failure-num">06</div>
+      <div class="failure-title">No Adoption Engine</div>
+      <p class="failure-desc">Solutions get built and deployed. Nobody uses them. The central team built what they thought was needed without deeply understanding the pain they were solving. Usage stays flat.</p>
+    </div>
+  </div>
+
+  <p>This playbook addresses all six. Not in theory — with specific operating models, frameworks, and implementation patterns drawn from governing 150+ business units at Google and building LLM systems at Amazon.</p>
+</div>
+</div>
+
+<!-- SECTION 02 — OPERATING MODEL -->
+<div class="dark-section" id="model">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">02 — The Operating Model</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Five Functions Every Enterprise AI Program Needs</h2>
+
+  <p>A durable enterprise AI program is not a team. It's an operating model — a set of functions that work together to identify, build, govern, and scale AI solutions across the organization.</p>
+
+  <p>Most programs start with only one or two of these functions. The missing ones create the failure patterns in Section 1. Here are all five:</p>
+
+  <div class="model-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="model-card">
+      <div class="model-label">Function 01</div>
+      <div class="model-title">Intake & Prioritization</div>
+      <p class="model-desc">Standardized process for identifying, evaluating, and prioritizing AI use cases. Intake form, discovery session, feasibility assessment, ROI model, risk tiering, and prioritization committee. Every AI request goes through this process. No exceptions.</p>
+    </div>
+    <div class="model-card">
+      <div class="model-label">Function 02</div>
+      <div class="model-title">Build & Deploy</div>
+      <p class="model-desc">The team that builds and deploys AI solutions — lightweight solutions built independently, complex integrations built in partnership with engineering. Player-coach model: the AI lead builds first, hands off second, governs always.</p>
+    </div>
+    <div class="model-card">
+      <div class="model-label">Function 03</div>
+      <div class="model-title">Governance & Controls</div>
+      <p class="model-desc">Risk tiering, guardrail enforcement, acceptable use policy, audit trail. Every deployed solution is classified by risk tier. Controls are applied before deployment, not after incidents. This function is not optional — it's the function that keeps the program running when something goes wrong.</p>
+    </div>
+    <div class="model-card">
+      <div class="model-label">Function 04</div>
+      <div class="model-title">Adoption & Enablement</div>
+      <p class="model-desc">AI Champions network, training playbooks, office hours, self-service resources. The adoption function is what prevents the central team from becoming permanent support for every solution. Champions own adoption in their business units. The central team owns the platform and the playbooks.</p>
+    </div>
+    <div class="model-card" style="grid-column: 1 / -1;">
+      <div class="model-label">Function 05</div>
+      <div class="model-title">Measurement & Executive Reporting</div>
+      <p class="model-desc">Pre/post ROI measurement on every solution. Executive dashboard tracking adoption, cost, risk, and outcomes across the portfolio. Monthly or quarterly business review with leadership. This function is what makes the program defensible to the CFO and the board — and what enables continued investment.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="background: rgba(28,53,87,0.8); border-left-color: var(--gold);">
+    <div class="callout-label">Key Insight</div>
+    <p style="color: rgba(255,255,255,0.85);">"Most programs start with Build & Deploy and add Governance after an incident. The programs that scale start with Intake and Governance before the first solution ships — then Build & Deploy operates inside a governed structure from day one."</p>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 03 — PLATFORM -->
+<div id="platform">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">03 — Platform Architecture</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Build Once, Scale Always</h2>
+
+  <p>The platform layer is what separates AI programs that scale from AI programs that stall. Without a platform, every new solution creates new technical debt — new API keys, new integrations, new governance gaps. With a platform, every new solution inherits everything the last one built.</p>
+
+  <p>The platform has four layers. Build them in this order:</p>
+
+  <div class="arch-diagram">
+    <div class="arch-label">Figure 1 — Enterprise AI Platform Architecture</div>
+    <svg width="100%" viewBox="0 0 720 400" role="img">
+      <title>Enterprise AI Platform Architecture</title>
+
+      <!-- Business layer -->
+      <rect x="20" y="20" width="680" height="50" rx="6" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+      <text x="360" y="42" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:10px;fill:#1b5e20;letter-spacing:0.12em;text-transform:uppercase">Business Units — Sales · Legal · HR · Finance · Operations · Engineering</text>
+      <text x="360" y="58" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#2d6a4f">All AI requests flow through the intake framework before reaching the platform</text>
+
+      <!-- Arrow down -->
+      <line x1="360" y1="70" x2="360" y2="95" stroke="#888" stroke-width="1" marker-end="url(#a1)"/>
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+        <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+
+      <!-- LLM Gateway -->
+      <rect x="20" y="96" width="680" height="60" rx="6" fill="#1c3557" stroke="#0c2442" stroke-width="1"/>
+      <text x="360" y="118" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:14px;fill:white;font-weight:600">Layer 1 — LLM Gateway</text>
+      <text x="360" y="142" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:10px;fill:rgba(255,255,255,0.55);letter-spacing:0.08em">Model Routing · Cost Attribution · Rate Limiting · Audit Logging · Policy Enforcement</text>
+
+      <!-- Arrow down -->
+      <line x1="360" y1="156" x2="360" y2="178" stroke="#888" stroke-width="1" marker-end="url(#a2)"/>
+
+      <!-- Guardrail layer -->
+      <rect x="20" y="179" width="330" height="60" rx="6" fill="#fff3e0" stroke="#e64a19" stroke-width="0.5"/>
+      <text x="185" y="201" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#bf360c;letter-spacing:0.1em;text-transform:uppercase">Layer 2a — Input Guardrails</text>
+      <text x="185" y="222" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#4e342e">PII Detection · Prompt Injection · Topic Restriction</text>
+
+      <rect x="370" y="179" width="330" height="60" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="0.5"/>
+      <text x="535" y="201" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#b71c1c;letter-spacing:0.1em;text-transform:uppercase">Layer 2b — Output Guardrails</text>
+      <text x="535" y="222" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#4e342e">Schema Validation · Hallucination Check · Toxicity Filter</text>
+
+      <!-- Arrow down -->
+      <line x1="360" y1="239" x2="360" y2="261" stroke="#888" stroke-width="1" marker-end="url(#a1)"/>
+
+      <!-- Model routing -->
+      <rect x="20" y="262" width="210" height="60" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="0.5"/>
+      <text x="125" y="283" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#0d47a1;letter-spacing:0.08em;text-transform:uppercase">Fast / Low Cost</text>
+      <text x="125" y="302" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#1565c0;font-weight:500">Claude Haiku / GPT-3.5</text>
+
+      <rect x="255" y="262" width="210" height="60" rx="6" fill="#e8eaf6" stroke="#3949ab" stroke-width="0.5"/>
+      <text x="360" y="283" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#283593;letter-spacing:0.08em;text-transform:uppercase">Complex Reasoning</text>
+      <text x="360" y="302" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#3949ab;font-weight:500">Claude Opus / GPT-4o</text>
+
+      <rect x="490" y="262" width="210" height="60" rx="6" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="0.5"/>
+      <text x="595" y="283" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#4a148c;letter-spacing:0.08em;text-transform:uppercase">Orchestration</text>
+      <text x="595" y="302" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:11px;fill:#6a1b9a;font-weight:500">n8n / Workato / Agents</text>
+
+      <!-- Layer 4 -->
+      <rect x="20" y="342" width="680" height="40" rx="6" fill="#f4f1eb" stroke="#d4cfc8" stroke-width="0.5"/>
+      <text x="360" y="362" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:10px;fill:#6b6560;letter-spacing:0.1em;text-transform:uppercase">Layer 4 — Audit Trail · Every call logged · Cost by team · Model by use case · Error tracking</text>
+    </svg>
+  </div>
+
+  <h3>Implementation Sequence — Non-Negotiable</h3>
+
+  <p>Build the platform layers in this exact order. Skipping steps creates the technical debt that stalls programs at scale.</p>
+
+  <p><strong>Layer 1 first — LLM Gateway.</strong> Every AI API call in the organization routes through one endpoint. Before you have guardrails, before you have monitoring, before you have model selection logic — you have one place where everything passes through. This is the control point for everything that follows.</p>
+
+  <p><strong>Layer 2 second — Guardrails.</strong> Input validation and output filtering get added to the gateway before any solution goes to production. These are platform-level controls, not solution-level controls. Once they're in the gateway, every solution that uses the gateway inherits them automatically.</p>
+
+  <p><strong>Layer 3 third — Model routing.</strong> Once the gateway exists and guardrails are in place, you add intelligent model routing. Simple classification tasks route to fast, cheap models. Complex reasoning routes to frontier models. Orchestration routes to workflow automation. Cost drops immediately.</p>
+
+  <p><strong>Layer 4 always — Audit trail.</strong> Every API call gets logged from day one. Input, output, model used, cost, team, use case, timestamp. This is what makes the program defensible — to legal, to compliance, to the board, to regulators.</p>
+</div>
+</div>
+
+<!-- SECTION 04 — INTAKE -->
+<div class="cream-section" id="intake">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">04 — The Intake Framework</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>How Good Ideas Become Governed Solutions</h2>
+
+  <p>Without an intake process, the AI team becomes a concierge service — reacting to whoever shouts loudest, building what's most visible, losing track of what's most valuable. The intake framework is what transforms a reactive team into a strategic program.</p>
+
+  <p>Every AI use case request goes through five stages:</p>
+
+  <table class="intake-table">
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>What Happens</th>
+        <th>Output</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1. Submit</td>
+        <td>Business team completes intake form — problem description, current process, data sources, expected outcome, rough ROI estimate</td>
+        <td>Completed intake form</td>
+        <td>Business team</td>
+      </tr>
+      <tr>
+        <td>2. Discovery</td>
+        <td>30-minute session with AI lead — validate the problem, identify data requirements, assess technical feasibility, clarify success metrics</td>
+        <td>Discovery notes, feasibility rating</td>
+        <td>AI Lead + Business team</td>
+      </tr>
+      <tr>
+        <td>3. Risk Tier</td>
+        <td>Classify the use case using the risk tiering framework — Low, Medium, High, Critical. Determines what controls are required before build</td>
+        <td>Risk tier assignment, required controls</td>
+        <td>AI Lead + Governance</td>
+      </tr>
+      <tr>
+        <td>4. Prioritize</td>
+        <td>Score against portfolio criteria — ROI potential, strategic alignment, implementation complexity, data readiness. Add to prioritized backlog</td>
+        <td>Priority score, backlog position</td>
+        <td>AI Lead + Leadership</td>
+      </tr>
+      <tr>
+        <td>5. Approve & Build</td>
+        <td>Approved use cases enter the build queue. AI lead builds lightweight solutions. Complex solutions go to engineering with AI lead as product owner</td>
+        <td>Built and governed solution</td>
+        <td>AI Lead + Engineering</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">From Google AI/ML SteerCo</div>
+    <p>"At Google, we ran this intake process across 14 corporate verticals and 50+ AI programs simultaneously. The intake framework is what made prioritization defensible — every decision was based on a score, not a relationship. When a Director asked why their program wasn't at the top of the list, we showed them the scorecard. That transparency is what builds trust with leadership."</p>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 05 — SCALING FLYWHEEL -->
+<div id="scale">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">05 — The Scaling Flywheel</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>From 5 Solutions to 50 Without Burning the Team</h2>
+
+  <p>The central AI team cannot build and support every solution at scale. The math doesn't work. A team of five cannot govern fifty solutions and keep shipping new ones simultaneously. The scaling flywheel is how you grow the program without growing the central team proportionally.</p>
+
+  <div class="arch-diagram">
+    <div class="arch-label">Figure 2 — The AI Scaling Flywheel</div>
+    <svg width="100%" viewBox="0 0 680 320" role="img">
+      <title>AI Scaling Flywheel</title>
+
+      <!-- Center -->
+      <circle cx="340" cy="160" r="55" fill="#1c3557" stroke="#0c2442" stroke-width="1"/>
+      <text x="340" y="153" text-anchor="middle" dominant-baseline="central" style="font-family:Fraunces,serif;font-size:13px;fill:white;font-weight:700">Platform</text>
+      <text x="340" y="170" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:rgba(255,255,255,0.5);letter-spacing:0.08em">SCALES</text>
+
+      <!-- Flywheel steps -->
+      <!-- Step 1 - Top -->
+      <ellipse cx="340" cy="40" rx="90" ry="28" fill="#e8f5e9" stroke="#2d6a4f" stroke-width="0.5"/>
+      <text x="340" y="35" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#1b5e20;letter-spacing:0.08em;text-transform:uppercase">Build First Win</text>
+      <text x="340" y="50" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:10px;fill:#2d6a4f">High pain, fast to ship</text>
+
+      <!-- Step 2 - Right -->
+      <ellipse cx="580" cy="160" rx="90" ry="28" fill="#fff3e0" stroke="#e64a19" stroke-width="0.5"/>
+      <text x="580" y="155" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#bf360c;letter-spacing:0.08em;text-transform:uppercase">Prove ROI</text>
+      <text x="580" y="170" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:10px;fill:#bf360c">Measure before/after</text>
+
+      <!-- Step 3 - Bottom -->
+      <ellipse cx="340" cy="280" rx="90" ry="28" fill="#e3f2fd" stroke="#1565c0" stroke-width="0.5"/>
+      <text x="340" y="275" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#0d47a1;letter-spacing:0.08em;text-transform:uppercase">Activate Champion</text>
+      <text x="340" y="290" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:10px;fill:#1565c0">Transfer ownership</text>
+
+      <!-- Step 4 - Left -->
+      <ellipse cx="100" cy="160" rx="90" ry="28" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="0.5"/>
+      <text x="100" y="155" text-anchor="middle" dominant-baseline="central" style="font-family:DM Mono,monospace;font-size:9px;fill:#4a148c;letter-spacing:0.08em;text-transform:uppercase">Scale the Pattern</text>
+      <text x="100" y="170" text-anchor="middle" dominant-baseline="central" style="font-family:DM Sans,sans-serif;font-size:10px;fill:#6a1b9a">Replicate in next BU</text>
+
+      <!-- Arrows -->
+      <path d="M 385 60 Q 500 60 500 115" fill="none" stroke="#c9973a" stroke-width="1.5" marker-end="url(#ag)"/>
+      <path d="M 520 180 Q 520 240 410 258" fill="none" stroke="#c9973a" stroke-width="1.5" marker-end="url(#ag)"/>
+      <path d="M 270 268 Q 160 268 160 215" fill="none" stroke="#c9973a" stroke-width="1.5" marker-end="url(#ag)"/>
+      <path d="M 150 140 Q 180 68 295 50" fill="none" stroke="#c9973a" stroke-width="1.5" marker-end="url(#ag)"/>
+
+      <defs>
+        <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#c9973a" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+
+      <!-- Label -->
+      <text x="340" y="315" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:10px;fill:#6b6560;letter-spacing:0.06em">Each cycle adds capacity without adding central team headcount</text>
+    </svg>
+  </div>
+
+  <h3>The AI Champions Network</h3>
+
+  <p>The Champions Network is the adoption engine that makes the flywheel spin. One Champion per major business unit — not an AI engineer, but a power user who has seen the value firsthand and wants to spread it.</p>
+
+  <p>Champions do three things: they train colleagues on AI tools in their business unit, they surface new use cases and feed them into the intake process, and they provide first-line support so the central team isn't fielding every question from every user.</p>
+
+  <p>At Google, the Risk Inspector governance program scaled to 150+ business units through exactly this model. A small central team set the standards, built the platform, and trained the Champions. The Champions drove adoption in their own domains. The central team's job shifted from delivery to enablement — which is how scale actually works.</p>
+
+  <h3>The Handoff Model</h3>
+
+  <p>Every solution built by the central AI team has an explicit handoff plan before the first line of code is written. Who owns it post-launch? Who trains new users? Who escalates issues? Who monitors performance?</p>
+
+  <p>Without a handoff model, every deployed solution is permanently owned by the central team. With a handoff model, the central team ships and moves on. The business unit owns the solution. The Champion maintains it. The platform governs it automatically.</p>
+</div>
+</div>
+
+<!-- SECTION 06 — 90-DAY PLAN -->
+<div class="dark-section" id="ninety">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">06 — The 90-Day Plan</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>What the First 90 Days Actually Look Like</h2>
+
+  <p>Most AI transformation plans describe what to build. This one describes what to do — in sequence, with specific outputs for each phase.</p>
+
+  <div class="days-grid">
+    <div class="days-card">
+      <div class="days-label">Days 1–30 — Foundation</div>
+      <div class="days-title">Listen Before Building</div>
+      <ul class="days-items">
+        <li>Shadow AI audit — find everything already running</li>
+        <li>Interview 15+ stakeholders across business units</li>
+        <li>Map top 20 AI use case opportunities by pain level</li>
+        <li>Deploy LLM gateway — routing and audit logging live</li>
+        <li>Stand up intake framework — form, process, committee</li>
+        <li>Define risk tiering criteria and approval authority</li>
+        <li>Identify 3 high-pain, fast-to-ship first use cases</li>
+        <li>Brief leadership on findings and 90-day roadmap</li>
+      </ul>
+    </div>
+    <div class="days-card">
+      <div class="days-label">Days 31–60 — First Wins</div>
+      <div class="days-title">Build, Ship, Measure</div>
+      <ul class="days-items">
+        <li>Ship first 3 AI solutions through the platform</li>
+        <li>Apply input and output guardrails to all solutions</li>
+        <li>Measure pre/post impact on each solution</li>
+        <li>Identify first wave of AI Champions</li>
+        <li>Run first Champions training session</li>
+        <li>Publish first AI usage playbook for self-service</li>
+        <li>Present first impact report to leadership</li>
+        <li>Open backlog to broader intake submissions</li>
+      </ul>
+    </div>
+    <div class="days-card">
+      <div class="days-label">Days 61–90 — Scale</div>
+      <div class="days-title">Systematize Everything</div>
+      <ul class="days-items">
+        <li>Hand off first solutions to Champions and business units</li>
+        <li>Ship 5 more solutions using the playbook</li>
+        <li>Launch executive AI dashboard — adoption, cost, ROI</li>
+        <li>Run first AI governance review with legal and security</li>
+        <li>Expand Champions network to all major business units</li>
+        <li>Stand up office hours — weekly open Q&A</li>
+        <li>Publish second playbook — agentic workflow patterns</li>
+        <li>Present full 90-day impact review to leadership</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="background: rgba(201,151,58,0.1); border-left-color: var(--gold);">
+    <div class="callout-label">Critical Sequencing Rule</div>
+    <p style="color: rgba(255,255,255,0.85);">"Never ask for adoption before delivering value. Every stakeholder conversation in Days 1-30 is listening and understanding — not pitching AI. The first time you ask someone to change their behavior is after you've already removed a pain point they've been living with. That sequencing is the difference between a program people resent and one they advocate for."</p>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 07 — METRICS -->
+<div id="metrics">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">07 — Measurement</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>What to Track and Why It Matters</h2>
+
+  <p>An AI program that can't measure its own impact will eventually lose its budget. Define the measurement model before the first solution ships — not after leadership asks for the ROI.</p>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-category">Business Impact</div>
+      <div class="metric-title">Did it move the needle?</div>
+      <ul class="metric-items">
+        <li>Hours saved per week per solution</li>
+        <li>FTE capacity freed by AI automation</li>
+        <li>Cycle time reduction by process</li>
+        <li>Error rate before and after</li>
+        <li>Cost per transaction before and after</li>
+        <li>Revenue impact where applicable</li>
+      </ul>
+    </div>
+    <div class="metric-card">
+      <div class="metric-category">Platform Health</div>
+      <div class="metric-title">Is the system working?</div>
+      <ul class="metric-items">
+        <li>Total API calls per week by team</li>
+        <li>Cost by business unit and use case</li>
+        <li>Model usage breakdown</li>
+        <li>Error rate and rejection rate</li>
+        <li>Guardrail trigger frequency</li>
+        <li>Latency by model and use case</li>
+      </ul>
+    </div>
+    <div class="metric-card">
+      <div class="metric-category">Adoption & Scale</div>
+      <div class="metric-title">Is it spreading?</div>
+      <ul class="metric-items">
+        <li>Active users per deployed solution</li>
+        <li>Number of governed solutions in production</li>
+        <li>Champions activated and trained</li>
+        <li>Intake submissions per month</li>
+        <li>Solutions in backlog vs in production</li>
+        <li>Business units reached</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The Executive Dashboard</h3>
+
+  <p>Leadership needs one view. Not 40 metrics — one dashboard with the four numbers that tell the story: total hours saved across the program, total cost of AI spend across the organization, number of governed solutions in production, and program ROI.</p>
+
+  <p>Build this dashboard in the first 30 days. Update it monthly. Present it at every leadership meeting. The dashboard is what keeps AI transformation funded — because it turns a technology initiative into a business outcome story that any CFO can understand and defend.</p>
+</div>
+</div>
+
+<!-- SECTION 08 — FAILURE MODES AT SCALE -->
+<div class="cream-section" id="failure">
+<div class="body-section">
+  <div class="section-marker">
+    <span class="section-num">08 — Failure Modes at Scale</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>What Breaks at 20+ Solutions That Worked at 5</h2>
+
+  <p>Programs that successfully scaled past the first phase encounter a new set of failure modes. These are different from the early failures in Section 1 — they're the problems that emerge specifically because of success.</p>
+
+  <h3>The Governance Debt Trap</h3>
+  <p>Speed of delivery outpaces speed of governance review. Solutions start shipping before the risk assessment is complete. Technical debt accumulates. One ungoverned solution causes an incident. Leadership overreacts by slowing everything down. The program loses momentum it never fully recovers.</p>
+  <p><strong>Fix:</strong> Risk tiering is automated at intake, not manual at deployment. Low-risk solutions auto-approve. Medium and above require review. The governance bottleneck disappears because most solutions never hit it.</p>
+
+  <h3>The Shadow AI Resurgence</h3>
+  <p>Business units that couldn't get their use case prioritized start building their own solutions. Ungoverned AI returns — not from ignorance this time, but from impatience. The central team didn't move fast enough.</p>
+  <p><strong>Fix:</strong> Self-service tier for low-risk use cases. Pre-approved prompt templates that any team can use without central team involvement. Speed of the official path must match or beat the speed of the workaround.</p>
+
+  <h3>The Champion Burnout Problem</h3>
+  <p>Champions who were enthusiastic early adopters become overwhelmed when adoption grows. They're providing support, training new users, collecting feedback, and still doing their original job. They burn out and disengage.</p>
+  <p><strong>Fix:</strong> Champions have explicit scope — they don't provide technical support, they provide peer enablement. Technical support goes to the central team or the help desk. Champions own culture, not infrastructure.</p>
+
+  <h3>The Measurement Gap</h3>
+  <p>Early solutions were measured carefully because they were high-visibility pilots. Later solutions get deployed without baseline measurement because the team is moving fast. When leadership asks for portfolio ROI, half the solutions have no pre/post data.</p>
+  <p><strong>Fix:</strong> Baseline measurement is a gate in the intake process. No use case gets approved without a defined success metric and a current-state baseline. This is non-negotiable from day one.</p>
+</div>
+</div>
+
+<!-- AUTHOR -->
+<div class="author-section">
+  <div class="author-inner">
+    <div>
+      <div class="author-label">About the Author</div>
+      <div class="author-name">Guru Krish</div>
+      <div class="author-title">Director — Enterprise AI Transformation, Governance & Security<br>ex-Google · ex-Amazon · Austin, TX</div>
+      <p class="author-bio">18 years building the operating infrastructure that makes enterprise AI trustworthy and scalable. At Google, led the AI/ML strategy program across 14 corporate verticals representing $30-50M in investment — running the SteerCo, building the intake framework, and managing the financial impact model that governed 50+ AI programs. Built and governed the Risk Inspector platform across 150+ business units, reducing partner onboarding from 150 days to 10 hours. At Amazon, built hands-on LLM governance pipelines on AWS Bedrock. This playbook codifies what both programs taught about the difference between an AI pilot and an AI program.</p>
+    </div>
+    <div class="author-links">
+      <a href="https://gurukrish.org" class="author-link" target="_blank">
+        <span class="link-label">Portfolio</span>
+        <span class="link-value">gurukrish.org</span>
+      </a>
+      <a href="https://gurukrish.org/trust-by-design.html" class="author-link" target="_blank">
+        <span class="link-label">Trust by Design Framework</span>
+        <span class="link-value">gurukrish.org/trust-by-design.html</span>
+      </a>
+      <a href="https://linkedin.com/in/gurukrish" class="author-link" target="_blank">
+        <span class="link-label">LinkedIn</span>
+        <span class="link-value">linkedin.com/in/gurukrish</span>
+      </a>
+      <a href="mailto:krish@gurukrish.org" class="author-link">
+        <span class="link-label">Email</span>
+        <span class="link-value">krish@gurukrish.org</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Guru Krish — Trust by Design™ · All rights reserved</span>
+  <span>Enterprise AI Transformation Playbook · gurukrish.org</span>
+</footer>
+
+</body>
+</html>
