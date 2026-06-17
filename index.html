@@ -397,6 +397,15 @@
 
   .principle:last-child { border-right: none; }
 
+  .principle-pillar {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
   .principle-icon {
     font-family: 'Fraunces', serif;
     font-size: 40px;
@@ -794,8 +803,8 @@
         <div class="stat-label">Google & Amazon</div>
       </div>
       <div class="stat">
-        <div class="stat-num">7→1wk</div>
-        <div class="stat-label">AI pipeline delivery</div>
+        <div class="stat-num">$30-50M</div>
+        <div class="stat-label">AI portfolio managed</div>
       </div>
     </div>
     <div class="hero-cta">
@@ -808,7 +817,7 @@
   <div class="hero-right">
     <p class="brand-statement">"I build the operating infrastructure that makes enterprise AI scalable, trustworthy, and governable — not by building the models, but by building everything around them."</p>
 
-    <div class="what-i-do">Three parallel areas of technical execution</div>
+    <div class="what-i-do">Three equal practice areas</div>
     <div class="pillars">
       <div class="pillar">
         <div class="pillar-num">01</div>
@@ -850,20 +859,23 @@
     <h2 class="section-title" style="color: white; margin-bottom: 48px;">Three principles that guide every engagement</h2>
     <div class="principles">
       <div class="principle">
+        <div class="principle-pillar">On Governance</div>
         <div class="principle-icon">01</div>
-        <p class="principle-text">"Fix the operational pain before you ask for organizational adoption." (Transformation)</p>
-        <p class="principle-exp">AI strategy fails when it ignores systemic bottlenecks. True transformation doesn't happen by mandating model usage; it happens when you partner with Finance, align cross-functional OKRs, and build the clear financial impact models that prove value from day one.</p>
+        <p class="principle-text">"Governance that nobody uses is just overhead. The gateway has to be easier than the workaround."</p>
+        <p class="principle-exp">At Google, Risk Inspector succeeded because compliance became the path of least resistance — not because we mandated it. At Amazon, adoption followed when we removed friction, not when we added policy.</p>
       </div>
       <div class="principle">
+        <div class="principle-pillar">On Transformation</div>
         <div class="principle-icon">02</div>
-        <p class="principle-text">"Governance that people bypass is just overhead. The gateway must be easier than the workaround." (Security & Governance)</p>
-        <p class="principle-exp">Security can't be a roadblock. Safe deployment at scale happens when risk tiering and automated guardrails (aligned to NIST AI RMF and OWASP) are built directly into the path of least resistance, so engineers naturally choose compliance over workarounds.</p>
+        <p class="principle-text">"The platform scales. The headcount doesn't have to."</p>
+        <p class="principle-exp">A centralized LLM gateway governing 600 engineers costs the same to operate whether you have 3 solutions engineers or 18. Build the mechanism first, then scale the team into it.</p>
       </div>
       <div class="principle">
+        <div class="principle-pillar">On AI Systems</div>
         <div class="principle-icon">03</div>
-        <p class="principle-text">"Architect the platform to scale; keep the operational headcount lean." (Systems)</p>
-        <p class="principle-exp">Durable pipelines rely on smart system architecture over manual effort. Automating intake triaging and model-reuse patterns via intelligent orchestration workflows (n8n/LangGraph) keeps the core team lean while smoothly governing enterprise-wide scope.</p>
-    </div>
+        <p class="principle-text">"Fix the pain before you ask for adoption."</p>
+        <p class="principle-exp">7-week access backlogs at Amazon. 3-month privacy reviews at Google. In both cases, adoption followed from removing friction — not from training sessions or mandates.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -895,20 +907,20 @@
       </div>
       <div class="case">
         <div class="case-company">Amazon — Security Data Intelligence</div>
-        <h3 class="case-title">Security Scorecard: End-to-End PM Ownership from Discovery to Shipped V2</h3>
-        <p class="case-desc">Owned the complete product lifecycle for Amazon's Security Scorecard v2. Executed extensive customer discovery interviews, completed rigorous log queries to understand real-world usage patterns, drove end-to-end demo ownership, and translated cross-functional insights into core engineering roadmaps that actively shaped annual OP1 and OP2 resource planning cycles.</p>
-        <div class="case-metrics"> 
+        <h3 class="case-title">Security Scorecard V2: End-to-End PM Ownership from Discovery to Ship</h3>
+        <p class="case-desc">Full PM cycle — customer discovery interviews, usage analysis via log queries, demo ownership, gap synthesis, and V2 strategy delivered into OP1/OP2 planning. Findings adopted by engineering and shipped. Scorecard adoption increased 40% post-launch across 70%+ of engineering teams.</p>
+        <div class="case-metrics">
           <div class="metric">
-            <span class="metric-num">Phase 1</span>
-            <span class="metric-desc">Product strategy delivered and shipped</span>
+            <span class="metric-num">Discovery→Ship</span>
+            <span class="metric-desc">Full PM cycle owned end-to-end</span>
           </div>
           <div class="metric">
-            <span class="metric-num">25%</span>
-            <span class="metric-desc">Usage increase post-launch</span>
+            <span class="metric-num">40%</span>
+            <span class="metric-desc">Scorecard adoption increase post-launch</span>
           </div>
           <div class="metric">
-            <span class="metric-num">OP1+2</span>
-            <span class="metric-desc">Planning cycles informed</span>
+            <span class="metric-num">70%+</span>
+            <span class="metric-desc">Engineering teams on standardized risk model</span>
           </div>
         </div>
       </div>
@@ -966,7 +978,7 @@
       <div class="system-card">
         <div class="system-label">Research & Applied — Amazon</div>
         <h3 class="system-title">LLM Data Access Pipeline — Amazon</h3>
-        <p class="system-desc">Built an LLM classification pipeline on AWS Bedrock to analyze security access request tickets — Python API to extract ticket data, stored in S3, classified in Jupyter Notebook using prompt engineering to identify what data customers were requesting and why. Used findings to: build new features in the Shepherd security product, create a new data access policy published internally, design an optimized data access request workflow, and reduce engineering oncall burden. Ran weekly office hours, trained the data team oncall, personally took ownership of access approvals during transition. Resolution time: 7 weeks → 1 week.</p>
+        <p class="system-desc">Owned end-to-end — problem definition, build, stakeholder alignment, adoption program, and outcome measurement. Built an LLM classification pipeline on AWS Bedrock to analyze security access request tickets — Python API to extract ticket data, stored in S3, classified in Jupyter Notebook using prompt engineering to identify what data customers were requesting and why. Used findings to: build new features in the Shepherd security product, create a new data access policy published internally, design an optimized data access request workflow, and reduce engineering oncall burden. Ran weekly office hours, trained the data team oncall, personally took ownership of access approvals during transition. Resolution time: 7 weeks → 1 week.</p>
         <div class="system-stack">
           <span class="stack-tag">AWS Bedrock</span>
           <span class="stack-tag">Python</span>
