@@ -1,2 +1,2 @@
 # gurukrish81.github.io
-AI Transformation &amp; Governance &amp; Security Portfolio
+Founder & Principal, Trust by Design - AI Transformation &amp; Governance &amp; Security Portfolio
