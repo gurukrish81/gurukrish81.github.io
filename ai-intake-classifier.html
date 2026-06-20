@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Use Case Intake Classifier — Trust by Design | Guru Krish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7LDD508FN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L7LDD508FN');
+</script>
+
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4f1eb;
+    --cream: #ede9e0;
+    --accent: #c8392b;
+    --navy: #1c3557;
+    --gold: #c9973a;
+    --muted: #6b6560;
+    --rule: #d4cfc8;
+    --green: #2d6a4f;
+    --amber: #b8560a;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(244,241,235,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-home {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-home::before { content: '←'; }
+
+  .nav-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    color: white;
+    min-height: 100vh;
+    padding-top: 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -150px; right: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,151,58,0.12) 0%, transparent 65%);
+  }
+
+  .cover-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .cover-label::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); }
+
+  .cover-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 5vw, 66px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: white;
+    margin-bottom: 24px;
+  }
+  .cover-title em { font-style: italic; color: var(--gold); }
+
+  .cover-subtitle {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 60px;
+    max-width: 620px;
+    line-height: 1.5;
+  }
+
+  .cover-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 48px;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+  }
+
+  /* BODY */
+  .section {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .section-divider { flex: 1; height: 1px; background: var(--rule); max-width: 48px; }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+  }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+    margin-top: 40px;
+  }
+
+  p {
+    font-size: 15px;
+    color: #2a2520;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  .dark-section {
+    background: var(--ink);
+    padding: 80px 0;
+  }
+  .dark-section h2 { color: white; }
+  .dark-section h3 { color: var(--gold); margin-top: 32px; }
+  .dark-section p { color: rgba(255,255,255,0.7); }
+  .dark-section .section-num { color: var(--gold); }
+  .dark-section .section-divider { background: rgba(255,255,255,0.15); }
+
+  .cream-section { background: var(--cream); padding: 80px 0; }
+
+  /* ARCHITECTURE DIAGRAM */
+  .arch-container {
+    margin: 40px 0;
+    max-width: 780px;
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 32px;
+  }
+
+  .arch-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  /* RISK TIERS */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    margin: 40px 0;
+    max-width: 780px;
+  }
+
+  .risk-card {
+    background: white;
+    padding: 28px;
+  }
+
+  .risk-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .risk-badge.low { background: #e8f5e9; color: #1b5e20; }
+  .risk-badge.medium { background: #fff3e0; color: #bf360c; }
+  .risk-badge.high { background: #fff8e1; color: #e65100; }
+  .risk-badge.critical { background: #ffebee; color: #b71c1c; }
+
+  .risk-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .risk-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .risk-route {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--navy);
+    letter-spacing: 0.05em;
+  }
+
+  /* FLOW STEPS */
+  .flow-steps {
+    margin: 40px 0;
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .flow-step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    opacity: 0.3;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .step-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .step-tech {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--navy);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #0d1117;
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    overflow-x: auto;
+    max-width: 780px;
+  }
+
+  .code-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 12px;
+  }
+
+  .code-block pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #e6edf3;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .code-key { color: #79c0ff; }
+  .code-str { color: #a5d6ff; }
+  .code-comment { color: #8b949e; }
+  .code-num { color: #f2cc60; }
+
+  /* DOWNLOAD BUTTON */
+  .download-section {
+    margin: 40px 0;
+    max-width: 780px;
+    background: var(--ink);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .download-text h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  .download-text p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    margin-left: 32px;
+    flex-shrink: 0;
+  }
+  .download-btn:hover { opacity: 0.85; }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--ink);
+    color: white;
+    padding: 32px 40px;
+    margin: 40px 0;
+    border-left: 4px solid var(--gold);
+    max-width: 780px;
+  }
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .callout p { color: rgba(255,255,255,0.85); font-size: 15px; font-style: italic; max-width: 100%; margin: 0; }
+
+  /* AUTHOR */
+  .author-section {
+    background: var(--ink);
+    color: white;
+    padding: 64px 0;
+  }
+
+  .author-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .author-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .author-name {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .author-title {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .author-bio {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .author-links { display: flex; flex-direction: column; gap: 16px; }
+
+  .author-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 22px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .author-link:hover { border-color: rgba(255,255,255,0.3); }
+
+  .link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .link-value { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.6); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .cover-inner { padding: 48px 24px; }
+    .section { padding: 48px 24px; }
+    .cover-stats { grid-template-columns: 1fr 1fr; }
+    .risk-grid { grid-template-columns: 1fr; }
+    .author-inner { grid-template-columns: 1fr; gap: 40px; }
+    .download-section { flex-direction: column; gap: 24px; }
+    .download-btn { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://gurukrish.org" class="nav-home">Portfolio</a>
+  <span class="nav-title">AI Intake Classifier · n8n Workflow</span>
+  <ul class="nav-links">
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#risk-tiers">Risk Tiers</a></li>
+    <li><a href="#flow">Flow</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">n8n Workflow · Trust by Design · May 2026</div>
+    <h1 class="cover-title">AI Use Case<br>Intake <em>Classifier</em></h1>
+    <p class="cover-subtitle">A production workflow that automatically classifies enterprise AI use cases by risk tier, routes them to the right approver, and logs every decision to an immutable audit trail.</p>
+
+    <div class="cover-stats">
+      <div>
+        <div class="stat-label">Risk Tiers</div>
+        <div class="stat-value">4</div>
+        <div class="stat-sub">LOW · MEDIUM · HIGH · CRITICAL</div>
+      </div>
+      <div>
+        <div class="stat-label">Routing Paths</div>
+        <div class="stat-value">4</div>
+        <div class="stat-sub">Auto → Manager → Board → CISO+Legal</div>
+      </div>
+      <div>
+        <div class="stat-label">Classifier</div>
+        <div class="stat-value">Claude</div>
+        <div class="stat-sub">Haiku via Anthropic API</div>
+      </div>
+      <div>
+        <div class="stat-label">Platform</div>
+        <div class="stat-value">n8n</div>
+        <div class="stat-sub">Open-source workflow automation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 — WHAT IT DOES -->
+<div>
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">01 — What It Does</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>The Problem It Solves</h2>
+
+  <p>Every enterprise AI program has the same intake problem: business teams submit AI requests however they want — email, Slack, meetings — and the central AI team becomes a concierge reacting to whoever shouts loudest. Nothing is prioritized by risk. Nothing is tracked. When an incident occurs, there's no audit trail.</p>
+
+  <p>This workflow fixes that. Every AI use case request hits a single endpoint. Claude classifies the risk automatically. The right approver gets notified immediately. Every decision is logged. The central AI team never touches a LOW-risk request — it's auto-approved and queued for build. Their capacity goes to HIGH and CRITICAL cases that actually need expert judgment.</p>
+
+  <div class="callout">
+    <div class="callout-label">Design Principle</div>
+    <p>"Risk tiering is automated at intake, not manual at deployment. Most requests never reach the governance bottleneck. Speed of the official path matches speed of the workaround."</p>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 2 — ARCHITECTURE -->
+<div class="dark-section" id="architecture">
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">02 — Architecture</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>How It's Built</h2>
+
+  <p>Seven nodes. One Claude API call. Four routing paths. Every request exits with a risk tier, approval decision, assigned approver, and audit log entry.</p>
+
+  <div class="arch-container" style="background:#111; border-color: rgba(255,255,255,0.1);">
+    <div class="arch-label" style="color: var(--gold);">Figure 1 — Workflow Architecture</div>
+    <svg width="100%" viewBox="0 0 720 360" role="img">
+      <title>AI Intake Classifier Workflow Architecture</title>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#c9973a" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+
+      <!-- Node 1: Webhook -->
+      <rect x="20" y="150" width="110" height="50" rx="4" fill="#1c3557" stroke="#c9973a" stroke-width="1"/>
+      <text x="75" y="172" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:#c9973a;letter-spacing:0.1em;text-transform:uppercase">Webhook</text>
+      <text x="75" y="188" text-anchor="middle" style="font-family:DM Sans,sans-serif;font-size:10px;fill:rgba(255,255,255,0.6)">POST /ai-intake</text>
+
+      <!-- Arrow -->
+      <line x1="130" y1="175" x2="158" y2="175" stroke="#c9973a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Node 2: Validate -->
+      <rect x="160" y="150" width="110" height="50" rx="4" fill="#1c3557" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="215" y="172" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase">Validate</text>
+      <text x="215" y="188" text-anchor="middle" style="font-family:DM Sans,sans-serif;font-size:10px;fill:rgba(255,255,255,0.6)">Extract Fields</text>
+
+      <!-- Arrow -->
+      <line x1="270" y1="175" x2="298" y2="175" stroke="#c9973a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Node 3: Claude -->
+      <rect x="300" y="140" width="120" height="70" rx="4" fill="#c8392b" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="360" y="168" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:white;letter-spacing:0.1em;text-transform:uppercase">Claude API</text>
+      <text x="360" y="184" text-anchor="middle" style="font-family:DM Sans,sans-serif;font-size:10px;fill:rgba(255,255,255,0.8)">Risk Classifier</text>
+      <text x="360" y="198" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:rgba(255,255,255,0.4)">Haiku · Temp 0</text>
+
+      <!-- Arrow -->
+      <line x1="420" y1="175" x2="448" y2="175" stroke="#c9973a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Node 4: Parse -->
+      <rect x="450" y="150" width="110" height="50" rx="4" fill="#1c3557" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="505" y="172" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase">Parse</text>
+      <text x="505" y="188" text-anchor="middle" style="font-family:DM Sans,sans-serif;font-size:10px;fill:rgba(255,255,255,0.6)">Classification</text>
+
+      <!-- Routing arrows down -->
+      <line x1="560" y1="158" x2="588" y2="80" stroke="#c9973a" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,2"/>
+      <line x1="560" y1="170" x2="588" y2="160" stroke="#c9973a" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,2"/>
+      <line x1="560" y1="182" x2="588" y2="240" stroke="#c9973a" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,2"/>
+      <line x1="560" y1="192" x2="588" y2="310" stroke="#c9973a" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,2"/>
+
+      <!-- Route boxes -->
+      <rect x="590" y="56" width="50" height="28" rx="3" fill="#2d6a4f" stroke="none"/>
+      <text x="615" y="74" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:white;font-weight:600">LOW</text>
+
+      <rect x="590" y="146" width="70" height="28" rx="3" fill="#b8560a" stroke="none"/>
+      <text x="625" y="164" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:white;font-weight:600">MEDIUM</text>
+
+      <rect x="590" y="226" width="50" height="28" rx="3" fill="#e65100" stroke="none"/>
+      <text x="615" y="244" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:white;font-weight:600">HIGH</text>
+
+      <rect x="590" y="296" width="70" height="28" rx="3" fill="#b71c1c" stroke="none"/>
+      <text x="625" y="314" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:white;font-weight:600">CRITICAL</text>
+
+      <!-- Route labels -->
+      <text x="648" y="74" style="font-family:DM Sans,sans-serif;font-size:9px;fill:rgba(255,255,255,0.4)"> Auto-approve</text>
+      <text x="668" y="164" style="font-family:DM Sans,sans-serif;font-size:9px;fill:rgba(255,255,255,0.4)"> Manager</text>
+      <text x="648" y="244" style="font-family:DM Sans,sans-serif;font-size:9px;fill:rgba(255,255,255,0.4)"> Board</text>
+      <text x="668" y="314" style="font-family:DM Sans,sans-serif;font-size:9px;fill:rgba(255,255,255,0.4)"> CISO+Legal</text>
+
+      <!-- Audit log at bottom -->
+      <text x="360" y="340" text-anchor="middle" style="font-family:DM Mono,monospace;font-size:9px;fill:rgba(255,255,255,0.3);letter-spacing:0.1em">All paths → Audit Log → Webhook Response</text>
+    </svg>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 3 — RISK TIERS -->
+<div id="risk-tiers">
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">03 — Risk Tiers</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Four Tiers, Four Paths</h2>
+
+  <p>Claude evaluates eleven intake fields and assigns a risk tier. The tier determines the approval path automatically — no human judgment required for routing.</p>
+
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-badge low">LOW</div>
+      <div class="risk-title">Auto-Approved</div>
+      <p class="risk-desc">Internal productivity tools. No sensitive data. Limited automation. Reversible actions. Build queue immediately.</p>
+      <div class="risk-route">→ AI Platform build queue · 0 days</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-badge medium">MEDIUM</div>
+      <div class="risk-title">Manager Approval</div>
+      <p class="risk-desc">Internal business data. Moderate automation. Some human review required in the workflow.</p>
+      <div class="risk-route">→ Business unit manager · 3 days</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-badge high">HIGH</div>
+      <div class="risk-title">Governance Board</div>
+      <p class="risk-desc">Sensitive data. Significant automation. Regulatory implications. External vendor AI involved.</p>
+      <div class="risk-route">→ AI Governance Board + DPIA required · 10 days</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-badge critical">CRITICAL</div>
+      <div class="risk-title">CISO + Legal + Board</div>
+      <p class="risk-desc">PII at scale. Financial decisions. Healthcare data. Legal implications. Fully autonomous with irreversible consequences.</p>
+      <div class="risk-route">→ CISO + Legal + Board · HOLD status · 30 days</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 4 — FLOW -->
+<div class="cream-section" id="flow">
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">04 — Step by Step</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>What Happens When a Request Hits</h2>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <div>
+        <div class="step-title">Intake form submits via POST</div>
+        <p class="step-desc">Business team submits use case details via webhook endpoint. Required: title, business unit, problem statement, data sources, expected outcome. Optional fields add classification precision.</p>
+        <div class="step-tech">n8n Webhook node · /ai-intake</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <div>
+        <div class="step-title">Validation and field extraction</div>
+        <p class="step-desc">Required fields are checked. Missing fields return an immediate error. Intake object is structured with a unique ID and timestamp. No malformed requests reach the AI classifier.</p>
+        <div class="step-tech">n8n Code node · JavaScript</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <div>
+        <div class="step-title">Claude classifies the risk</div>
+        <p class="step-desc">Structured prompt sends all eleven intake fields to Claude Haiku. Temperature set to 0 for deterministic output. Claude returns JSON: risk tier, risk score 1-10, primary risk factors, required controls, approval path, estimated review days, classification rationale, next steps.</p>
+        <div class="step-tech">Claude claude-3-haiku-20240307 · Anthropic API · Temp: 0</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">04</div>
+      <div>
+        <div class="step-title">Parse and validate classification</div>
+        <p class="step-desc">Claude's JSON response is parsed and merged with the intake object. If Claude returns non-JSON for any reason, fallback logic triggers MEDIUM tier and flags for manual review — the system never silently fails.</p>
+        <div class="step-tech">n8n Code node · JSON validation · Fallback handling</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">05</div>
+      <div>
+        <div class="step-title">Route to correct approval path</div>
+        <p class="step-desc">IF nodes check risk tier. LOW → auto-approve, add to build queue. MEDIUM → identify business unit manager, set 3-day deadline. HIGH → AI Governance Board, list required documentation. CRITICAL → CISO + Legal + Board, place on HOLD, notify CTO.</p>
+        <div class="step-tech">n8n IF nodes · 4 routing paths · Business unit approver mapping</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">06</div>
+      <div>
+        <div class="step-title">Audit log entry</div>
+        <p class="step-desc">Every request — regardless of risk tier — generates an audit log entry. Fields: audit ID, intake ID, timestamp, submitter, risk tier, risk score, approval decision, approver, risk factors, controls, rationale. Immutable record for compliance.</p>
+        <div class="step-tech">n8n Code node · Structured audit entry · Console log → external store</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">07</div>
+      <div>
+        <div class="step-title">Structured response returned</div>
+        <p class="step-desc">Webhook response delivers: intake ID, risk tier, risk score, approval decision, assigned approver, estimated review days, next action, plain-language message to submitter, required controls, primary risk factors.</p>
+        <div class="step-tech">n8n Respond to Webhook node · JSON response</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 5 — SAMPLE REQUEST/RESPONSE -->
+<div>
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">05 — Sample Request</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Request and Response</h2>
+
+  <div class="code-block">
+    <div class="code-label">Sample POST Request — /ai-intake</div>
+    <pre><span class="code-comment">// POST https://your-n8n-instance.com/webhook/ai-intake</span>
+{
+  <span class="code-key">"use_case_title"</span>: <span class="code-str">"Customer Email Sentiment Classifier"</span>,
+  <span class="code-key">"business_unit"</span>: <span class="code-str">"Sales"</span>,
+  <span class="code-key">"problem_statement"</span>: <span class="code-str">"Sales reps spend 2 hours/day manually triaging customer emails. We want AI to classify sentiment and priority."</span>,
+  <span class="code-key">"current_process"</span>: <span class="code-str">"Manual reading and tagging in Salesforce"</span>,
+  <span class="code-key">"data_sources"</span>: <span class="code-str">"Customer email inbox, Salesforce CRM records"</span>,
+  <span class="code-key">"data_sensitivity"</span>: <span class="code-str">"Contains customer names and communication history"</span>,
+  <span class="code-key">"expected_outcome"</span>: <span class="code-str">"Auto-classify emails by sentiment and urgency, route to right rep"</span>,
+  <span class="code-key">"estimated_users"</span>: <span class="code-str">"45 sales reps"</span>,
+  <span class="code-key">"estimated_roi"</span>: <span class="code-str">"~90 hours/week saved across team"</span>,
+  <span class="code-key">"external_vendor"</span>: <span class="code-str">false</span>,
+  <span class="code-key">"regulatory_domain"</span>: <span class="code-str">"none"</span>,
+  <span class="code-key">"submitter_email"</span>: <span class="code-str">"jsmith@company.com"</span>
+}</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-label">Classified Response — MEDIUM Risk</div>
+    <pre>{
+  <span class="code-key">"success"</span>: true,
+  <span class="code-key">"intake_id"</span>: <span class="code-str">"INTAKE-1748476800000"</span>,
+  <span class="code-key">"risk_tier"</span>: <span class="code-str">"MEDIUM"</span>,
+  <span class="code-key">"risk_score"</span>: <span class="code-num">5</span>,
+  <span class="code-key">"approval_decision"</span>: <span class="code-str">"PENDING_MANAGER_APPROVAL"</span>,
+  <span class="code-key">"assigned_approver"</span>: <span class="code-str">"sales-manager@company.com"</span>,
+  <span class="code-key">"estimated_review_days"</span>: <span class="code-num">3</span>,
+  <span class="code-key">"next_action"</span>: <span class="code-str">"Awaiting manager approval from sales-manager@company.com"</span>,
+  <span class="code-key">"primary_risk_factors"</span>: [
+    <span class="code-str">"Customer communication data in scope"</span>,
+    <span class="code-str">"Automated routing decisions affecting customer relationships"</span>
+  ],
+  <span class="code-key">"required_controls"</span>: [
+    <span class="code-str">"Human review of flagged edge cases"</span>,
+    <span class="code-str">"Regular accuracy monitoring"</span>,
+    <span class="code-str">"Override mechanism for reps"</span>
+  ],
+  <span class="code-key">"message"</span>: <span class="code-str">"Your AI use case has been classified MEDIUM risk. Your manager at sales-manager@company.com has been notified. Expected decision: 3 business days."</span>
+}</pre>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 6 — DOWNLOAD -->
+<div class="dark-section" id="download">
+<div class="section">
+  <div class="section-marker">
+    <span class="section-num">06 — Download & Deploy</span>
+    <div class="section-divider"></div>
+  </div>
+  <h2>Import Into n8n in 4 Steps</h2>
+
+  <div class="flow-steps" style="color: rgba(255,255,255,0.7);">
+    <div class="flow-step" style="border-color: rgba(255,255,255,0.1);">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title" style="color:white;">Download the workflow JSON</div>
+        <p class="step-desc">Click the download button below. Save the file locally.</p>
+      </div>
+    </div>
+    <div class="flow-step" style="border-color: rgba(255,255,255,0.1);">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title" style="color:white;">Open n8n and import</div>
+        <p class="step-desc">In n8n: Menu → Import from File → select the JSON. The full workflow loads with all nodes connected.</p>
+      </div>
+    </div>
+    <div class="flow-step" style="border-color: rgba(255,255,255,0.1);">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title" style="color:white;">Add your Anthropic API key</div>
+        <p class="step-desc">In the Claude Risk Classifier node → Credentials → HTTP Header Auth → set value to your Anthropic API key. Get one at console.anthropic.com.</p>
+      </div>
+    </div>
+    <div class="flow-step" style="border-color: rgba(255,255,255,0.1);">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title" style="color:white;">Activate and test</div>
+        <p class="step-desc">Toggle the workflow to Active. POST the sample request from Section 5 to your webhook URL. Verify the risk classification and routing response.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="download-section">
+    <div class="download-text">
+      <h4>AI Use Case Intake Classifier</h4>
+      <p>Complete n8n workflow JSON · 11 nodes · 4 risk tiers · Anthropic Claude Haiku</p>
+    </div>
+    <a href="ai-intake-classifier-workflow.json" download class="download-btn">
+      ↓ Download Workflow JSON
+    </a>
+  </div>
+</div>
+</div>
+
+<!-- AUTHOR -->
+<div class="author-section">
+  <div class="author-inner">
+    <div>
+      <div class="author-label">Built By</div>
+      <div class="author-name">Guru Krish</div>
+      <div class="author-title">Director — Enterprise AI Transformation, Governance & Security<br>ex-Google · ex-Amazon · Austin, TX</div>
+      <p class="author-bio">This workflow implements the intake governance pattern from the Trust by Design framework — built from 18 years of governing enterprise AI programs at Google and Amazon. The design principle: governance at intake, not at deployment. Every AI use case classified before a line of code is written. Audit trail from day one.</p>
+    </div>
+    <div class="author-links">
+      <a href="https://gurukrish.org" class="author-link" target="_blank">
+        <span class="link-label">Portfolio</span>
+        <span class="link-value">gurukrish.org</span>
+      </a>
+      <a href="https://gurukrish.org/trust-by-design.html" class="author-link" target="_blank">
+        <span class="link-label">Trust by Design Framework</span>
+        <span class="link-value">gurukrish.org/trust-by-design.html</span>
+      </a>
+      <a href="https://gurukrish.org/enterprise-ai-playbook.html" class="author-link" target="_blank">
+        <span class="link-label">Enterprise AI Transformation Playbook</span>
+        <span class="link-value">gurukrish.org/enterprise-ai-playbook.html</span>
+      </a>
+      <a href="mailto:krish@gurukrish.org" class="author-link">
+        <span class="link-label">Email</span>
+        <span class="link-value">krish@gurukrish.org</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Guru Krish — Trust by Design™ · All rights reserved</span>
+  <span>AI Intake Classifier · n8n Workflow · gurukrish.org</span>
+</footer>
+
+</body>
+</html>
