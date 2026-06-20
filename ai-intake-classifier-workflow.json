@@ -1,0 +1,370 @@
+{
+  "name": "AI Use Case Intake Classifier",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-intake",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Intake Form Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "ai-intake-classifier"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate and extract intake form fields\nconst body = $input.first().json.body || $input.first().json;\n\nconst required = ['use_case_title', 'business_unit', 'problem_statement', 'data_sources', 'expected_outcome'];\nconst missing = required.filter(field => !body[field]);\n\nif (missing.length > 0) {\n  throw new Error(`Missing required fields: ${missing.join(', ')}`);\n}\n\n// Build structured intake object\nconst intake = {\n  id: `INTAKE-${Date.now()}`,\n  timestamp: new Date().toISOString(),\n  submitter_email: body.submitter_email || 'unknown@company.com',\n  use_case_title: body.use_case_title,\n  business_unit: body.business_unit,\n  problem_statement: body.problem_statement,\n  current_process: body.current_process || 'Not provided',\n  data_sources: body.data_sources,\n  data_sensitivity: body.data_sensitivity || 'unknown',\n  expected_outcome: body.expected_outcome,\n  estimated_users: body.estimated_users || 'unknown',\n  estimated_roi: body.estimated_roi || 'Not provided',\n  external_vendor: body.external_vendor || false,\n  regulatory_domain: body.regulatory_domain || 'none'\n};\n\nreturn [{ json: intake }];"
+      },
+      "id": "validate-extract",
+      "name": "Validate & Extract Fields",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{$credentials.httpHeaderAuth.value}}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "options": {},
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-3-haiku-20240307\",\n  \"max_tokens\": 1024,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"You are an Enterprise AI Governance specialist. Classify the following AI use case intake request into a risk tier and provide a structured assessment.\\n\\nRISK TIER DEFINITIONS:\\n- LOW: Internal productivity tools, no sensitive data, limited automation, reversible actions. Auto-approved.\\n- MEDIUM: Involves internal business data, moderate automation, some human review required. Requires manager approval.\\n- HIGH: Sensitive customer/employee data, significant automation, regulatory implications, or external vendor AI. Requires AI Governance Board review.\\n- CRITICAL: PII at scale, financial decisions, healthcare data, legal implications, or fully autonomous decisions with irreversible consequences. Requires CISO + Legal + AI Governance Board.\\n\\nINTAKE REQUEST:\\nTitle: {{ $json.use_case_title }}\\nBusiness Unit: {{ $json.business_unit }}\\nProblem: {{ $json.problem_statement }}\\nCurrent Process: {{ $json.current_process }}\\nData Sources: {{ $json.data_sources }}\\nData Sensitivity: {{ $json.data_sensitivity }}\\nExpected Outcome: {{ $json.expected_outcome }}\\nEstimated Users: {{ $json.estimated_users }}\\nEstimated ROI: {{ $json.estimated_roi }}\\nExternal Vendor AI: {{ $json.external_vendor }}\\nRegulatory Domain: {{ $json.regulatory_domain }}\\n\\nRespond ONLY with valid JSON in this exact format:\\n{\\n  \\\"risk_tier\\\": \\\"LOW|MEDIUM|HIGH|CRITICAL\\\",\\n  \\\"risk_score\\\": 1-10,\\n  \\\"primary_risk_factors\\\": [\\\"factor1\\\", \\\"factor2\\\"],\\n  \\\"required_controls\\\": [\\\"control1\\\", \\\"control2\\\"],\\n  \\\"approval_path\\\": \\\"Auto-approved|Manager|AI Governance Board|CISO + Legal + AI Governance Board\\\",\\n  \\\"estimated_review_days\\\": 0-30,\\n  \\\"classification_rationale\\\": \\\"2-3 sentence explanation\\\",\\n  \\\"recommended_next_steps\\\": [\\\"step1\\\", \\\"step2\\\"]\\n}\"\n    }\n  ]\n}"
+      },
+      "id": "claude-classifier",
+      "name": "Claude Risk Classifier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Claude's classification response\nconst claudeResponse = $input.first().json;\nconst intake = $('Validate & Extract Fields').first().json;\n\n// Extract text content from Claude response\nconst content = claudeResponse.content[0].text;\n\nlet classification;\ntry {\n  classification = JSON.parse(content);\n} catch (e) {\n  // Fallback if Claude returns non-JSON\n  classification = {\n    risk_tier: 'MEDIUM',\n    risk_score: 5,\n    primary_risk_factors: ['Classification parsing error - manual review required'],\n    required_controls: ['Manual risk assessment'],\n    approval_path: 'AI Governance Board',\n    estimated_review_days: 5,\n    classification_rationale: 'Automated classification failed. Manual review triggered.',\n    recommended_next_steps: ['Contact AI Governance team for manual review']\n  };\n}\n\n// Merge intake + classification\nconst result = {\n  ...intake,\n  classification: classification,\n  status: 'CLASSIFIED',\n  classified_at: new Date().toISOString()\n};\n\nreturn [{ json: result }];"
+      },
+      "id": "parse-classification",
+      "name": "Parse Classification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.classification.risk_tier }}",
+              "operation": "equals",
+              "value2": "LOW"
+            }
+          ]
+        }
+      },
+      "id": "route-low",
+      "name": "Is LOW Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.classification.risk_tier }}",
+              "operation": "equals",
+              "value2": "MEDIUM"
+            }
+          ]
+        }
+      },
+      "id": "route-medium",
+      "name": "Is MEDIUM Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1120, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.classification.risk_tier }}",
+              "operation": "equals",
+              "value2": "HIGH"
+            }
+          ]
+        }
+      },
+      "id": "route-high",
+      "name": "Is HIGH Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1120, 560]
+    },
+    {
+      "parameters": {
+        "jsCode": "// AUTO-APPROVE: LOW risk use cases\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    ...data,\n    approval_decision: 'AUTO_APPROVED',\n    approved_by: 'AI Governance System',\n    approval_timestamp: new Date().toISOString(),\n    notification_sent_to: data.submitter_email,\n    next_action: 'Submit to AI Platform team for build queue',\n    message: `Your AI use case \"${data.use_case_title}\" has been automatically approved (LOW risk). It has been added to the AI Platform build queue. Expected review: ${data.classification.estimated_review_days} business days.`\n  }\n}];"
+      },
+      "id": "auto-approve",
+      "name": "Auto-Approve LOW",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1380, 120]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ROUTE TO MANAGER: MEDIUM risk use cases\nconst data = $input.first().json;\n\n// Determine approver based on business unit\nconst approverMap = {\n  'Sales': 'sales-manager@company.com',\n  'HR': 'hr-manager@company.com',\n  'Finance': 'finance-manager@company.com',\n  'Legal': 'legal-manager@company.com',\n  'Engineering': 'eng-manager@company.com',\n  'Marketing': 'marketing-manager@company.com',\n  'Operations': 'ops-manager@company.com'\n};\n\nconst approver = approverMap[data.business_unit] || 'ai-governance@company.com';\n\nreturn [{\n  json: {\n    ...data,\n    approval_decision: 'PENDING_MANAGER_APPROVAL',\n    assigned_approver: approver,\n    approval_deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),\n    notification_sent_to: [data.submitter_email, approver],\n    next_action: `Awaiting manager approval from ${approver}`,\n    message: `Your AI use case \"${data.use_case_title}\" requires manager approval (MEDIUM risk). Your manager at ${approver} has been notified. Expected decision: ${data.classification.estimated_review_days} business days.`\n  }\n}];"
+      },
+      "id": "route-to-manager",
+      "name": "Route to Manager",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1380, 340]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ROUTE TO AI GOVERNANCE BOARD: HIGH risk\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    ...data,\n    approval_decision: 'PENDING_GOVERNANCE_BOARD',\n    assigned_approver: 'ai-governance-board@company.com',\n    approval_deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),\n    notification_sent_to: [data.submitter_email, 'ai-governance-board@company.com'],\n    required_documentation: [\n      'Data Privacy Impact Assessment',\n      'Security Risk Assessment',\n      'Bias & Fairness Evaluation Plan',\n      'Human-in-the-loop documentation',\n      'Audit trail specification'\n    ],\n    next_action: 'Complete required documentation and submit to AI Governance Board',\n    message: `Your AI use case \"${data.use_case_title}\" requires AI Governance Board review (HIGH risk). Complete the required documentation within 5 business days. Board review: ${data.classification.estimated_review_days} business days.`\n  }\n}];"
+      },
+      "id": "route-to-board",
+      "name": "Route to Governance Board",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1380, 520]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ESCALATE: CRITICAL risk — CISO + Legal + Governance Board\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    ...data,\n    approval_decision: 'CRITICAL_ESCALATION',\n    assigned_approver: 'CISO + Legal + AI Governance Board',\n    notification_sent_to: [\n      data.submitter_email,\n      'ciso@company.com',\n      'legal@company.com',\n      'ai-governance-board@company.com',\n      'cto@company.com'\n    ],\n    required_documentation: [\n      'Full Data Privacy Impact Assessment (DPIA)',\n      'Legal Compliance Review',\n      'Security Architecture Review',\n      'Executive Risk Acceptance',\n      'Regulatory Compliance Documentation',\n      'Incident Response Plan',\n      'Model Explainability Documentation',\n      'Third-party Vendor Security Assessment (if applicable)'\n    ],\n    hold_reason: 'Use case placed on HOLD pending CRITICAL risk review',\n    next_action: 'CISO + Legal + AI Governance Board notified. Do not proceed without written approval.',\n    message: `CRITICAL ALERT: AI use case \"${data.use_case_title}\" has been flagged as CRITICAL risk. CISO, Legal, and AI Governance Board have been notified. Use case is on HOLD. Do not proceed without written executive approval.`\n  }\n}];"
+      },
+      "id": "critical-escalation",
+      "name": "Critical Escalation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1380, 700]
+    },
+    {
+      "parameters": {
+        "jsCode": "// LOG to audit trail — all risk levels\nconst data = $input.first().json;\n\nconst auditEntry = {\n  audit_id: `AUDIT-${Date.now()}`,\n  intake_id: data.id,\n  timestamp: new Date().toISOString(),\n  use_case_title: data.use_case_title,\n  business_unit: data.business_unit,\n  submitter: data.submitter_email,\n  risk_tier: data.classification.risk_tier,\n  risk_score: data.classification.risk_score,\n  approval_decision: data.approval_decision,\n  assigned_approver: data.assigned_approver || 'System Auto-Approved',\n  primary_risk_factors: data.classification.primary_risk_factors,\n  required_controls: data.classification.required_controls,\n  classification_rationale: data.classification.classification_rationale,\n  action_taken: `Routed to: ${data.approval_decision}`\n};\n\nconsole.log('AUDIT LOG:', JSON.stringify(auditEntry, null, 2));\n\nreturn [{ json: { ...data, audit_entry: auditEntry } }];"
+      },
+      "id": "audit-log",
+      "name": "Audit Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1620, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  success: true,\n  intake_id: $json.id,\n  risk_tier: $json.classification.risk_tier,\n  risk_score: $json.classification.risk_score,\n  approval_decision: $json.approval_decision,\n  assigned_approver: $json.assigned_approver || 'Auto-Approved',\n  estimated_review_days: $json.classification.estimated_review_days,\n  next_action: $json.next_action,\n  message: $json.message,\n  required_controls: $json.classification.required_controls,\n  primary_risk_factors: $json.classification.primary_risk_factors\n}, null, 2) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "send-response",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1840, 400]
+    }
+  ],
+  "connections": {
+    "Intake Form Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate & Extract Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Extract Fields": {
+      "main": [
+        [
+          {
+            "node": "Claude Risk Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Risk Classifier": {
+      "main": [
+        [
+          {
+            "node": "Parse Classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Classification": {
+      "main": [
+        [
+          {
+            "node": "Is LOW Risk?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is MEDIUM Risk?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is HIGH Risk?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is LOW Risk?": {
+      "main": [
+        [
+          {
+            "node": "Auto-Approve LOW",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is MEDIUM Risk?": {
+      "main": [
+        [
+          {
+            "node": "Route to Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is HIGH Risk?": {
+      "main": [
+        [
+          {
+            "node": "Route to Governance Board",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Critical Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-Approve LOW": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route to Manager": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route to Governance Board": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Critical Escalation": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Log": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "AI Governance",
+      "createdAt": "2026-05-29"
+    },
+    {
+      "name": "Trust by Design",
+      "createdAt": "2026-05-29"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {},
+  "versionId": "1.0.0"
+}
