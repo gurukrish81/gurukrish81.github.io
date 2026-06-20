@@ -990,15 +990,19 @@
         </div>
       </div>
       <div class="system-card">
-        <div class="system-label">In Progress</div>
+        <div class="system-label">Trust by Design — Live</div>
         <h3 class="system-title">AI Governance Intake Classifier</h3>
-        <p class="system-desc">Takes a business AI use case description, classifies risk tier (Low/Medium/High/Critical), generates discovery questions, recommends whether to proceed and who needs to approve. Built in n8n with LLM reasoning layer.</p>
+        <p class="system-desc">Built an AI-augmented governance intake system that takes a plain-text business use case, classifies risk tier (Low / Medium / High / Critical) using the Trust by Design framework, generates tailored discovery questions, and routes to the right approver — all in under 30 seconds. Architected on n8n's native AI Agent node (LangChain-based), with the risk policy pulled dynamically from GitHub at runtime for clean separation of concerns. Refactored from a brittle 13-node HTTP request pattern to a stable 4-node native agent architecture. Eliminates manual intake triage that previously took days.</p>
         <div class="system-stack">
           <span class="stack-tag">n8n</span>
           <span class="stack-tag">Claude API</span>
           <span class="stack-tag">LangChain</span>
+          <span class="stack-tag">Prompt Engineering</span>
+          <span class="stack-tag">GitHub</span>
         </div>
-        <p class="coming-soon">→ Live demo coming soon</p>
+        <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+          <a href="https://github.com/gurukrish81/trust-by-design" target="_blank" style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); text-decoration:none; border:1px solid var(--accent); padding:8px 16px; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='white';" onmouseout="this.style.background='transparent';this.style.color='var(--accent)';">View on GitHub →</a>
+        </div>
       </div>
       <div class="system-card">
         <div class="system-label">In Progress</div>
