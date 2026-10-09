@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare AI Architecture — Trust by Design</title>
+  <style>
+    :root {
+      --black: #1a1a1a;
+      --white: #ffffff;
+      --cream: #f9f7f4;
+      --accent: #c8a84b;
+      --accent-light: #f0e8d0;
+      --critical: #dc2626;
+      --high: #ea580c;
+      --medium: #ca8a04;
+      --low: #16a34a;
+      --hipaa: #7c3aed;
+      --owasp: #b91c1c;
+      --layer-bg-1: #f0f7ff;
+      --layer-bg-2: #f0fdf4;
+      --layer-bg-3: #fef9f0;
+      --layer-bg-4: #fdf2f8;
+      --layer-bg-5: #f0f7ff;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--cream);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--black);
+      color: var(--white);
+      padding: 48px 40px 40px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .header-meta {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .header-sub {
+      font-size: 16px;
+      color: #9ca3af;
+      font-style: italic;
+    }
+    .header-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .badge {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 3px;
+      border: 1px solid;
+    }
+    .badge-hipaa { color: #c4b5fd; border-color: #7c3aed; background: rgba(124, 58, 237, 0.15); }
+    .badge-owasp { color: #fca5a5; border-color: #b91c1c; background: rgba(185, 28, 28, 0.15); }
+    .badge-nist { color: var(--accent); border-color: var(--accent); background: rgba(200, 168, 75, 0.15); }
+
+    /* MAIN */
+    .main { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* SECTION */
+    .section-header {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 24px;
+      margin-top: 48px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* USE CASE CARDS */
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .use-case-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      border-top: 3px solid var(--accent);
+    }
+    .use-case-tag {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .use-case-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .use-case-card p { font-size: 14px; color: #6b7280; line-height: 1.5; }
+    .risk-pill {
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-top: 12px;
+      border: 1px solid;
+    }
+    .risk-critical { color: var(--critical); border-color: var(--critical); background: rgba(220,38,38,0.08); }
+    .risk-high { color: var(--high); border-color: var(--high); background: rgba(234,88,12,0.08); }
+
+    /* ARCHITECTURE DIAGRAM */
+    .arch-diagram {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .arch-title-bar {
+      background: var(--black);
+      color: var(--white);
+      padding: 16px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* LAYERS */
+    .arch-layers { padding: 0; }
+
+    .layer {
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .layer:last-child { border-bottom: none; }
+
+    .layer-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px 12px;
+      cursor: pointer;
+    }
+    .layer-num {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #9ca3af;
+      min-width: 32px;
+    }
+    .layer-name {
+      font-weight: 600;
+      font-size: 15px;
+      flex: 1;
+    }
+    .layer-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.05em;
+    }
+    .tag-hipaa { background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-owasp { background: rgba(185, 28, 28, 0.1); color: #b91c1c; border: 1px solid rgba(185,28,28,0.2); }
+    .tag-control { background: rgba(22,163,74,0.1); color: #16a34a; border: 1px solid rgba(22,163,74,0.2); }
+    .tag-component { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+    .layer-body {
+      padding: 0 24px 20px 72px;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .component-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      background: var(--white);
+      position: relative;
+    }
+    .component-box.has-threat { border-left: 3px solid var(--owasp); }
+    .component-box.has-control { border-left: 3px solid var(--hipaa); }
+
+    .component-box h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .component-box p {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    .threat-note {
+      margin-top: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: var(--owasp);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .control-note {
+      margin-top: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: var(--hipaa);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    /* FLOW ARROW */
+    .flow-arrow {
+      text-align: center;
+      padding: 8px 0;
+      color: #9ca3af;
+      font-size: 20px;
+    }
+
+    /* THREAT / CONTROL LEGEND */
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .legend-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .legend-box h3 {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .legend-box.threat-legend h3 { color: var(--owasp); }
+    .legend-box.control-legend h3 { color: var(--hipaa); }
+    .legend-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .legend-code {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      min-width: 70px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      text-align: center;
+      height: fit-content;
+      margin-top: 1px;
+    }
+    .owasp-code { background: rgba(185,28,28,0.1); color: var(--owasp); border: 1px solid rgba(185,28,28,0.2); }
+    .hipaa-code { background: rgba(124,58,237,0.1); color: var(--hipaa); border: 1px solid rgba(124,58,237,0.2); }
+
+    /* COMPLIANCE TABLE */
+    .compliance-table {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .compliance-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .compliance-table th {
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 16px;
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .compliance-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .compliance-table tr:last-child td { border-bottom: none; }
+    .compliance-table tr:nth-child(even) td { background: #f9fafb; }
+    .status-yes { color: var(--low); font-weight: 600; }
+    .status-partial { color: var(--medium); font-weight: 600; }
+    .status-required { color: var(--owasp); font-weight: 600; }
+
+    /* TIER CALLOUT */
+    .tier-callout {
+      background: rgba(220, 38, 38, 0.06);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      border-left: 4px solid var(--critical);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .tier-callout .tier-badge {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--critical);
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .tier-callout p { font-size: 14px; line-height: 1.6; }
+
+    /* FOOTER */
+    .footer {
+      background: var(--black);
+      color: #6b7280;
+      padding: 32px 40px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: gap;
+      margin-top: 60px;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 700px) {
+      .header { padding: 32px 20px; }
+      .main { padding: 24px 16px 60px; }
+      .legend { grid-template-columns: 1fr; }
+      .layer-body { padding-left: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-meta">Trust by Design Toolkit · Architecture Reference</div>
+  <h1>Healthcare AI Architecture</h1>
+  <div class="header-sub">Clinical Documentation &amp; Patient Triage — Full Stack Reference</div>
+  <div class="header-badges">
+    <span class="badge badge-hipaa">HIPAA Mapped</span>
+    <span class="badge badge-owasp">OWASP LLM Top 10</span>
+    <span class="badge badge-nist">NIST AI RMF</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- USE CASES -->
+  <div class="section-header">Target Use Cases</div>
+  <div class="use-cases">
+    <div class="use-case-card">
+      <div class="use-case-tag">Use Case 01</div>
+      <h3>Clinical Documentation</h3>
+      <p>AI-assisted generation of clinical notes, discharge summaries, and SOAP notes from physician dictation or structured inputs. Reduces documentation time by 40–60%.</p>
+      <span class="risk-pill risk-critical">CRITICAL Tier</span>
+    </div>
+    <div class="use-case-card">
+      <div class="use-case-tag">Use Case 02</div>
+      <h3>Patient Triage Routing</h3>
+      <p>LLM-assisted intake triage that classifies patient symptoms and urgency, routing to appropriate care setting (ED, urgent care, primary care, telehealth).</p>
+      <span class="risk-pill risk-critical">CRITICAL Tier</span>
+    </div>
+    <div class="use-case-card">
+      <div class="use-case-tag">Use Case 03</div>
+      <h3>Prior Authorization</h3>
+      <p>Automated extraction and structuring of patient records, insurance forms, and clinical criteria to support prior authorization decisions with human review.</p>
+      <span class="risk-pill risk-high">HIGH Tier</span>
+    </div>
+  </div>
+
+  <!-- RISK TIER CALLOUT -->
+  <div class="tier-callout">
+    <div class="tier-badge">⚠ CRITICAL Tier</div>
+    <p>Both primary use cases are Risk Tier CRITICAL under the Trust by Design framework: they process PHI (Dimension 2: score 4), have direct patient safety implications (Dimension 3: score 4), and may take actions that affect care routing (Dimension 1: score 3). <strong>All CRITICAL tier controls apply: full guardrail suite, human-in-the-loop on every output, immutable audit logging, red team before production.</strong></p>
+  </div>
+
+  <!-- ARCHITECTURE LAYERS -->
+  <div class="section-header">Full-Stack Architecture — Layer by Layer</div>
+
+  <div class="arch-diagram">
+    <div class="arch-title-bar">
+      <span>Healthcare AI — Data Flow Architecture</span>
+      <span style="color: #9ca3af; font-size: 10px;">READ TOP TO BOTTOM → DATA INGESTION TO PATIENT OUTPUT</span>
+    </div>
+
+    <div class="arch-layers">
+
+      <!-- LAYER 1: DATA INGESTION -->
+      <div class="layer" style="background: #f0f7ff;">
+        <div class="layer-header">
+          <div class="layer-num">L1</div>
+          <div class="layer-name">Data Ingestion &amp; Source Systems</div>
+          <div class="layer-tags">
+            <span class="tag tag-hipaa">HIPAA §164.312(a)</span>
+            <span class="tag tag-owasp">OWASP LLM06</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-control">
+              <h4>EHR / EMR Integration</h4>
+              <p>HL7 FHIR R4 API connection to Epic, Cerner, or Meditech. Patient records, encounter history, problem lists.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Access control + audit log required for all PHI reads</div>
+              <div class="threat-note"><span>▪</span> OWASP LLM06: Sensitive data exposure — PHI must be de-identified or encrypted before LLM ingestion</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Clinical Dictation / Audio</h4>
+              <p>Physician voice input via microphone or dictation device. Transcribed via speech-to-text before LLM processing.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Audio recordings containing PHI require same access controls as text records</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Patient Intake Forms</h4>
+              <p>Structured symptom questionnaires, chief complaint capture, demographic data from patient portal or kiosk.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM01: Prompt injection — patient-supplied text must be sanitized before passing to LLM</div>
+            </div>
+            <div class="component-box">
+              <h4>Lab / Imaging Results</h4>
+              <p>HL7 v2 or FHIR DiagnosticReport resources. Lab values, radiology reports, pathology results.</p>
+              <div class="control-note"><span>▪</span> HIPAA: PHI classification — all lab values are protected health information</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 2: PHI HANDLING / PREPROCESSING -->
+      <div class="layer" style="background: #fff7ed;">
+        <div class="layer-header">
+          <div class="layer-num">L2</div>
+          <div class="layer-name">PHI Handling &amp; Preprocessing</div>
+          <div class="layer-tags">
+            <span class="tag tag-hipaa">HIPAA §164.514 De-ID</span>
+            <span class="tag tag-owasp">OWASP LLM06</span>
+            <span class="tag tag-control">Critical Control</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-threat has-control">
+              <h4>PII/PHI Detection</h4>
+              <p>Microsoft Presidio or AWS Comprehend Medical scans all inbound text for 18 HIPAA identifiers (name, DOB, MRN, SSN, address, etc.).</p>
+              <div class="control-note"><span>▪</span> HIPAA §164.514(b): Must remove all 18 identifiers for safe harbor de-identification</div>
+              <div class="threat-note"><span>▪</span> OWASP LLM06: PHI leakage prevention — block identifiers from reaching LLM context window</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>De-Identification / Tokenization</h4>
+              <p>Replace PHI with reversible tokens (PATIENT_001, DOB_REDACTED) for LLM processing. Token vault maintains mapping for re-identification on output.</p>
+              <div class="control-note"><span>▪</span> HIPAA: De-identified data no longer subject to PHI rules — enables safe LLM processing</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>Input Validation &amp; Sanitization</h4>
+              <p>Strip control characters, normalize encoding, enforce max token limits. Validate that input structure matches expected schema.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM01: Prompt injection defense — sanitize all patient-supplied and third-party content</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Encryption in Transit</h4>
+              <p>TLS 1.3 minimum for all data movement. PHI never traverses network unencrypted. Key management via AWS KMS or Azure Key Vault.</p>
+              <div class="control-note"><span>▪</span> HIPAA §164.312(e)(2)(ii): Encryption required for ePHI in transit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 3: EMBEDDING + VECTOR STORE -->
+      <div class="layer" style="background: #f0fdf4;">
+        <div class="layer-header">
+          <div class="layer-num">L3</div>
+          <div class="layer-name">Embedding &amp; Vector Store (RAG Layer)</div>
+          <div class="layer-tags">
+            <span class="tag tag-owasp">OWASP LLM10</span>
+            <span class="tag tag-hipaa">HIPAA Access Control</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-control">
+              <h4>Clinical Knowledge Base</h4>
+              <p>De-identified clinical guidelines, drug interactions, ICD-10 coding rules, formularies. Embedded and stored in vector DB.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Clinical KB must not contain patient-specific data — population-level only</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>Vector Store (Pinecone / Weaviate)</h4>
+              <p>Semantic search index for relevant clinical context retrieval. Patient history embeddings stored with access controls by MRN scope.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM10: Model theft/data exfiltration — vector store must be access-controlled, not publicly queryable</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>Context Assembly</h4>
+              <p>Retrieves top-k relevant chunks from vector store. Combines patient context (tokenized) + clinical guidelines into LLM prompt.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM04: Data poisoning — validate retrieved chunks for integrity; malicious injection into KB must be prevented</div>
+            </div>
+            <div class="component-box">
+              <h4>Embedding Model</h4>
+              <p>text-embedding-3-large (OpenAI) or equivalent clinical-tuned model. Separate from generation LLM. Version pinned.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 4: LLM INFERENCE -->
+      <div class="layer" style="background: #fef9f0;">
+        <div class="layer-header">
+          <div class="layer-num">L4</div>
+          <div class="layer-name">LLM Inference Engine</div>
+          <div class="layer-tags">
+            <span class="tag tag-owasp">OWASP LLM01 · LLM02</span>
+            <span class="tag tag-control">CRITICAL — Full Guardrail Suite</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-threat has-control">
+              <h4>System Prompt &amp; Constraints</h4>
+              <p>Hardcoded clinical persona and constraints. Explicit prohibitions: no diagnoses, no prescriptions, no treatment recommendations without HITL sign-off.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM01: Jailbreak defense — system prompt includes injection-resistant framing</div>
+              <div class="control-note"><span>▪</span> Scope limitation: system prompt enforces "document and route only" behavior for triage use case</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>LLM (Claude / GPT-4 / Gemini)</h4>
+              <p>Anthropic Claude or equivalent. Version pinned in production. Temperature: 0.1 for clinical documentation (determinism required). No internet access.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM02: Insecure output handling — all LLM outputs treated as untrusted until post-processing validation</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Input Guard (Lakera Guard / Rebuff)</h4>
+              <p>Pre-LLM guardrail layer. Detects prompt injection attempts, jailbreaks, PII leakage in constructed prompt. Blocks before LLM call.</p>
+              <div class="control-note"><span>▪</span> Lakera Guard: Classifies injection attempts in real-time. Blocks &gt;95% of known attack patterns</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Output Guard (Post-Processing)</h4>
+              <p>Validates LLM output against schema. Runs PII scan on output. Blocks responses containing diagnosis keywords or prescriptive language without HITL flag.</p>
+              <div class="control-note"><span>▪</span> HIPAA: LLM output must not contain PHI beyond what was tokenized in — re-identification check before delivery</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 5: GUARDRAIL LAYER -->
+      <div class="layer" style="background: #fdf2f8;">
+        <div class="layer-header">
+          <div class="layer-num">L5</div>
+          <div class="layer-name">Safety Guardrail Layer</div>
+          <div class="layer-tags">
+            <span class="tag tag-owasp">OWASP LLM09</span>
+            <span class="tag tag-control">CRITICAL — Required for Patient Safety</span>
+            <span class="tag tag-hipaa">HIPAA §164.308</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-threat has-control">
+              <h4>Clinical Safety Classifier</h4>
+              <p>Fine-tuned classifier that flags outputs containing: diagnosis statements, drug dosage recommendations, "do not resuscitate" or DNR language, suicide/harm indicators.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM09: Overreliance — system must not allow clinical decisions to be made without clinician review</div>
+              <div class="control-note"><span>▪</span> Any flagged output routes to HITL queue before delivery</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Hallucination Detection</h4>
+              <p>Groundedness check: verifies LLM output claims are traceable to retrieved context. Ungrounded assertions flagged for clinician review.</p>
+              <div class="control-note"><span>▪</span> Clinical notes must be grounded in provided patient data — hallucinated clinical details are a patient safety risk</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>Output Schema Validation</h4>
+              <p>Enforces expected output structure (SOAP note format, triage code, ICD-10 list). Rejects malformed outputs rather than passing them downstream.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM02: Prevents malformed/adversarial output from reaching clinical systems</div>
+            </div>
+            <div class="component-box has-control">
+              <h4>Audit Logger (Immutable)</h4>
+              <p>Logs: full input, output, model version, confidence scores, guardrail decisions, timestamp, clinician ID (anonymized). Stored in append-only log store (AWS CloudTrail / Azure Monitor).</p>
+              <div class="control-note"><span>▪</span> HIPAA §164.312(b): Audit controls — maintain log of access and activity for all ePHI systems</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 6: HUMAN IN THE LOOP -->
+      <div class="layer" style="background: #fffbeb;">
+        <div class="layer-header">
+          <div class="layer-num">L6</div>
+          <div class="layer-name">Human-in-the-Loop (HITL) Checkpoint</div>
+          <div class="layer-tags">
+            <span class="tag tag-control">CRITICAL Tier — Mandatory</span>
+            <span class="tag tag-hipaa">HIPAA §164.308(a)(3)</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-control">
+              <h4>Clinician Review Queue</h4>
+              <p>Flagged outputs held in queue until reviewed and approved by licensed clinician. SLA: &lt;4 hours for non-emergency, &lt;15 minutes for triage routing.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Clinician sign-off creates accountability chain for PHI-based decisions</div>
+            </div>
+            <div class="component-box">
+              <h4>Review Interface</h4>
+              <p>Clinician sees: AI-generated draft, source data used, confidence score, flagged concerns. One-click approve, edit, or reject with reason code.</p>
+            </div>
+            <div class="component-box has-control">
+              <h4>Approval Audit Trail</h4>
+              <p>Every approval logged: clinician ID, timestamp, action taken (approve/edit/reject), reason code, final output delivered.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Creates non-repudiable record of clinical decision accountability</div>
+            </div>
+            <div class="component-box">
+              <h4>Feedback Loop to Model</h4>
+              <p>Rejections and edits tagged for model evaluation. Monthly review by clinical informatics team. Significant drift triggers model re-evaluation gate.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">↓</div>
+
+      <!-- LAYER 7: OUTPUT ROUTING -->
+      <div class="layer" style="background: #f0f7ff;">
+        <div class="layer-header">
+          <div class="layer-num">L7</div>
+          <div class="layer-name">Output Routing &amp; Delivery</div>
+          <div class="layer-tags">
+            <span class="tag tag-hipaa">HIPAA §164.312(e)</span>
+            <span class="tag tag-owasp">OWASP LLM08</span>
+          </div>
+        </div>
+        <div class="layer-body">
+          <div class="component-grid">
+            <div class="component-box has-control">
+              <h4>Re-Identification (Clinical Notes)</h4>
+              <p>Reverse tokenization: replace patient tokens back with actual identifiers before writing to EHR. Token vault lookup with access control.</p>
+              <div class="control-note"><span>▪</span> HIPAA: Re-identified output is PHI — must be written to secured clinical system only, not returned to requestor without access control</div>
+            </div>
+            <div class="component-box has-threat">
+              <h4>EHR Write-Back</h4>
+              <p>FHIR DocumentReference write to EHR. Clinician approval required for write to become permanent. Versioned — original AI draft preserved alongside clinician-edited final.</p>
+              <div class="threat-note"><span>▪</span> OWASP LLM08: Excessive agency — AI write to EHR must require explicit clinician approval at each instance</div>
+            </div>
+            <div class="component-box">
+              <h4>Triage Routing Decision</h4>
+              <p>Approved triage output triggers routing: ED admission queue, urgent care referral, telehealth queue, or primary care scheduling. Decision logged with clinician ID.</p>
+            </div>
+            <div class="component-box has-control">
+              <h4>Patient-Facing Communication</h4>
+              <p>Patient receives: triage category (non-clinical language), estimated wait, next steps. AI-generated — not containing diagnosis. Reviewed by triage nurse before send.</p>
+              <div class="control-note"><span>▪</span> HIPAA §164.312(e): Patient communication via secure messaging only (not plain email)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end arch-layers -->
+  </div><!-- end arch-diagram -->
+
+  <!-- THREAT/CONTROL LEGEND -->
+  <div class="section-header">OWASP LLM Top 10 — Threats Mapped to This Architecture</div>
+  <div class="legend">
+    <div class="legend-box threat-legend">
+      <h3>🔴 OWASP Threats in This Stack</h3>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM01</span>
+        <span><strong>Prompt Injection</strong> — Patient-supplied text in intake forms and EHR notes can contain injection payloads. Mitigated at L2 (input sanitization) and L4 (Lakera Guard).</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM02</span>
+        <span><strong>Insecure Output</strong> — LLM outputs treated as untrusted until L5 guardrails validate structure and safety. Clinical system receives only validated outputs.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM04</span>
+        <span><strong>Data Poisoning</strong> — Clinical knowledge base could be poisoned with inaccurate guidelines. Mitigated by L3 source validation and clinical informatics curation.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM06</span>
+        <span><strong>Sensitive Data Exposure</strong> — PHI must not reach LLM context unprotected. Mitigated by L2 de-identification before any LLM call.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM08</span>
+        <span><strong>Excessive Agency</strong> — AI must not write to EHR or route patients without explicit clinician approval. Enforced at L6 (HITL) and L7 (approval-gated write).</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM09</span>
+        <span><strong>Overreliance</strong> — Clinicians may over-trust AI output without clinical review. Mitigated by L5 classifier, L6 HITL mandate, and training program.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code owasp-code">LLM10</span>
+        <span><strong>Model Theft / Exfiltration</strong> — Vector store and fine-tuned models are high-value IP. Mitigated by L3 access controls and network isolation.</span>
+      </div>
+    </div>
+    <div class="legend-box control-legend">
+      <h3>🟣 HIPAA Technical Safeguards — Controls in This Stack</h3>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.312(a)</span>
+        <span><strong>Access Control</strong> — Role-based access to EHR integration (L1), vector store (L3), clinician review queue (L6).</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.312(b)</span>
+        <span><strong>Audit Controls</strong> — Immutable audit log at L5 captures all access and decisions. Retained per retention schedule.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.312(c)</span>
+        <span><strong>Integrity</strong> — Output schema validation at L5 prevents unauthorized alteration. Versioned EHR writes at L7.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.312(d)</span>
+        <span><strong>Authentication</strong> — Clinician ID required at L6 before any approval action. SSO + MFA enforced for clinical staff.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.312(e)</span>
+        <span><strong>Transmission Security</strong> — TLS 1.3 at L2 and L7. Patient communications via secure messaging only.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.514(b)</span>
+        <span><strong>De-Identification</strong> — Safe harbor de-identification at L2 (18 identifier removal) before LLM processing.</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-code hipaa-code">§164.308(a)</span>
+        <span><strong>Security Management</strong> — Governance framework, workforce training, and access management procedures cover AI staff.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE CONTROLS TABLE -->
+  <div class="section-header">HIPAA Control Implementation Status</div>
+  <div class="compliance-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Control Area</th>
+          <th>HIPAA Reference</th>
+          <th>Implementation</th>
+          <th>Layer</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PHI De-Identification</td>
+          <td>§164.514(b)</td>
+          <td>Microsoft Presidio — 18 identifier removal before LLM</td>
+          <td>L2</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Access Control — EHR</td>
+          <td>§164.312(a)(1)</td>
+          <td>RBAC with minimum necessary access; FHIR scoped tokens</td>
+          <td>L1, L7</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Audit Controls</td>
+          <td>§164.312(b)</td>
+          <td>Immutable append-only log; 6-year retention for HIPAA</td>
+          <td>L5</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Encryption in Transit</td>
+          <td>§164.312(e)(2)(ii)</td>
+          <td>TLS 1.3 minimum; PHI never in plaintext on network</td>
+          <td>L2, L7</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Encryption at Rest</td>
+          <td>§164.312(a)(2)(iv)</td>
+          <td>AES-256 for all stored PHI; KMS for key management</td>
+          <td>L3, L5</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Authentication</td>
+          <td>§164.312(d)</td>
+          <td>SSO + MFA for all clinical staff; service-to-service mTLS</td>
+          <td>L6</td>
+          <td class="status-yes">✓ Required</td>
+        </tr>
+        <tr>
+          <td>Human Oversight — Clinical AI</td>
+          <td>§164.308(a)(6)</td>
+          <td>Mandatory clinician approval before any EHR write or routing decision</td>
+          <td>L6</td>
+          <td class="status-yes">✓ CRITICAL</td>
+        </tr>
+        <tr>
+          <td>Business Associate Agreements</td>
+          <td>§164.308(b)</td>
+          <td>BAA required from: LLM vendor, vector DB vendor, audit log vendor</td>
+          <td>Vendor</td>
+          <td class="status-required">⚠ Legal Required</td>
+        </tr>
+        <tr>
+          <td>Workforce Training</td>
+          <td>§164.308(a)(5)</td>
+          <td>Annual HIPAA training + AI-specific training for clinical AI users</td>
+          <td>Program</td>
+          <td class="status-required">⚠ Program Required</td>
+        </tr>
+        <tr>
+          <td>Incident Response</td>
+          <td>§164.308(a)(6)</td>
+          <td>AI-specific incident playbook + HIPAA breach notification procedure</td>
+          <td>Program</td>
+          <td class="status-required">⚠ Playbook Required</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AUTHOR -->
+  <div style="background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 28px 32px; display: flex; gap: 24px; align-items: flex-start;">
+    <div style="flex: 1;">
+      <div style="font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;">Trust by Design · Architecture Reference</div>
+      <div style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">Guru Krish</div>
+      <div style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">Enterprise AI Transformation | AI Platforms | AI Security · ex-Google · ex-Amazon</div>
+      <div style="font-size: 13px; color: #374151; line-height: 1.6;">This architecture was designed using the Trust by Design framework — the same approach applied to AI governance at Google Corp Engineering across hundreds of AI systems. For regulated industries including healthcare, the CRITICAL tier controls are not optional. They are the difference between a defensible AI system and a liability.</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px; min-width: 200px;">
+      <a href="https://gurukrish.org" style="font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 10px 20px; text-align: center; border-radius: 4px;">gurukrish.org →</a>
+      <a href="https://cal.com/guru-krish-am5cxx/30min" style="font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); text-decoration: none; background: var(--black); padding: 10px 20px; text-align: center; border-radius: 4px;">Schedule a Call →</a>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>© 2026 Guru Krish · Trust by Design · Healthcare AI Architecture Reference</span>
+  <span>Part of the Trust-by-Design Toolkit · <a href="https://gurukrish.org">gurukrish.org</a></span>
+</div>
+
+</body>
+</html>
